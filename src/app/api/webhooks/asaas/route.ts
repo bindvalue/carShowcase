@@ -9,11 +9,12 @@ import {
 const WEBHOOK_TOKEN = ASAAS_WEBHOOK_TOKEN;
 const DIAS_TOLERANCIA_ATRASO = 5;
 
-const supabaseAdmin = createClient(
-  SUPABASE_URL,
-  SUPABASE_SERVICE_ROLE_KEY,
-  { auth: { persistSession: false } }
-);
+// ⚠️ Cria o cliente DENTRO da função (lazy) — não no top-level
+function getSupabaseAdmin() {
+  return createClient(SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY, {
+    auth: { persistSession: false },
+  });
+}
 
 interface AsaasPaymentPayload {
   id: string;
@@ -114,9 +115,11 @@ async function handlePaymentSuccess(userId: string, payload: AsaasWebhookPayload
   const payment = payload.payment;
   if (!payment) return;
 
+  const supabase = getSupabaseAdmin();
+
   const proximoVencimento = addMesClampado(payment.dueDate);
 
-  const { data: subscriber } = await supabaseAdmin
+  const { data: subscriber } = await supabase
     .from("subscribers")
     .select("id, email, is_lifetime")
     .eq("user_id", userId)
@@ -124,7 +127,7 @@ async function handlePaymentSuccess(userId: string, payload: AsaasWebhookPayload
 
   if (!subscriber) return;
 
-  const { error } = await supabaseAdmin
+  const { error } = await supabase
     .from("subscribers")
     .update({
       subscribed: true,
@@ -149,9 +152,10 @@ async function handlePaymentOverdue(userId: string, payload: AsaasWebhookPayload
   const payment = payload.payment;
   if (!payment) return;
 
+  const supabase = getSupabaseAdmin();
   const diasAtraso = calcularDiasAtraso(payment.dueDate);
 
-  const { data: subscriber } = await supabaseAdmin
+  const { data: subscriber } = await supabase
     .from("subscribers")
     .select("email, is_lifetime")
     .eq("user_id", userId)
@@ -160,7 +164,7 @@ async function handlePaymentOverdue(userId: string, payload: AsaasWebhookPayload
   if (!subscriber || subscriber.is_lifetime) return;
 
   if (diasAtraso > DIAS_TOLERANCIA_ATRASO) {
-    await supabaseAdmin
+    await supabase
       .from("subscribers")
       .update({
         subscribed: false,
@@ -172,7 +176,9 @@ async function handlePaymentOverdue(userId: string, payload: AsaasWebhookPayload
 }
 
 async function handlePaymentCancelled(userId: string, payload: AsaasWebhookPayload) {
-  const { data: subscriber } = await supabaseAdmin
+  const supabase = getSupabaseAdmin();
+
+  const { data: subscriber } = await supabase
     .from("subscribers")
     .select("is_lifetime")
     .eq("user_id", userId)
@@ -180,7 +186,7 @@ async function handlePaymentCancelled(userId: string, payload: AsaasWebhookPaylo
 
   if (!subscriber || subscriber.is_lifetime) return;
 
-  await supabaseAdmin
+  await supabase
     .from("subscribers")
     .update({
       subscribed: false,
@@ -191,7 +197,9 @@ async function handlePaymentCancelled(userId: string, payload: AsaasWebhookPaylo
 }
 
 async function handleSubscriptionCancelled(userId: string, payload: AsaasWebhookPayload) {
-  const { data: subscriber } = await supabaseAdmin
+  const supabase = getSupabaseAdmin();
+
+  const { data: subscriber } = await supabase
     .from("subscribers")
     .select("is_lifetime")
     .eq("user_id", userId)
@@ -199,7 +207,7 @@ async function handleSubscriptionCancelled(userId: string, payload: AsaasWebhook
 
   if (!subscriber || subscriber.is_lifetime) return;
 
-  await supabaseAdmin
+  await supabase
     .from("subscribers")
     .update({
       subscribed: false,
