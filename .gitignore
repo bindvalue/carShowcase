@@ -71,7 +71,33 @@ logs
 ~$*
 
 # ═══════════════════════════════════════════════════════
-# BACKUPS LOCAIS (não commitar)
+# BACKUPS (não commitar)
 # ═══════════════════════════════════════════════════════
-database.manual.bak.ts
+backup/
+backups/
+*.backup
+*.bak
+*_backup
+*-backup
 subscribers_backup_*
+# ═══════════════════════════════════════════════════════
+# BACKUPS E ARQUIVOS GERADOS
+# ═══════════════════════════════════════════════════════
+*.backup.ts
+*.backup.tsx
+*.backup.js
+*backup*
+estrutura-projeto.txt
+
+# ═══════════════════════════════════════════════════════
+# SUPABASE (cache local do CLI)
+# ═══════════════════════════════════════════════════════
+supabase/
+
+# ═══════════════════════════════════════════════════════
+# CLOUDFLARE
+# ═══════════════════════════════════════════════════════
+.open-next/
+.wrangler/
+.dev.vars
+cloudflare-env.d.ts
