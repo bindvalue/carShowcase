@@ -6,12 +6,19 @@ import {
   calcularStatusAssinatura,
   podeGerenciarVeiculos,
 } from "@/lib/subscription";
+import {
+  getSupabaseUrl,
+  getSupabaseServiceRoleKey,
+} from "@/lib/env";
 
-const supabaseAdmin = createAdminClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.SUPABASE_SERVICE_ROLE_KEY!,
-  { auth: { persistSession: false } }
-);
+// ⚠️ Lazy — não roda no build
+function getSupabaseAdmin() {
+  return createAdminClient(
+    getSupabaseUrl(),
+    getSupabaseServiceRoleKey(),
+    { auth: { persistSession: false } }
+  );
+}
 
 /**
  * Guarda de proteção para páginas de veículos.
@@ -27,6 +34,8 @@ export async function guardVeiculosAccess() {
   } = await supabase.auth.getUser();
 
   if (!user) redirect("/login");
+
+  const supabaseAdmin = getSupabaseAdmin();
 
   const { data: subscriber } = await supabaseAdmin
     .from("subscribers")

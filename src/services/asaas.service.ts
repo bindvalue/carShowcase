@@ -6,17 +6,22 @@ import {
   listAsaasPayments,
 } from "@/lib/asaas/client";
 import { createClient } from "@supabase/supabase-js";
-import { SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY } from "@/lib/env";
+import {
+  getSupabaseUrl,
+  getSupabaseServiceRoleKey,
+} from "@/lib/env";
 import { PLANO } from "@/lib/plano";
 
 // ═══════════════════════════════════════════════════════
-// SUPABASE ADMIN (lazy — não roda no build)
+// SUPABASE ADMIN (lazy)
 // ═══════════════════════════════════════════════════════
 
 function getSupabaseAdmin() {
-  return createClient(SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY, {
-    auth: { persistSession: false },
-  });
+  return createClient(
+    getSupabaseUrl(),
+    getSupabaseServiceRoleKey(),
+    { auth: { persistSession: false } }
+  );
 }
 
 // ═══════════════════════════════════════════════════════

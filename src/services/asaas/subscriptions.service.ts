@@ -5,12 +5,19 @@ import {
   cancelAsaasSubscription,
 } from "@/lib/asaas/client";
 import { createClient } from "@supabase/supabase-js";
+import {
+  getSupabaseUrl,
+  getSupabaseServiceRoleKey,
+} from "@/lib/env";
 
-const supabaseAdmin = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.SUPABASE_SERVICE_ROLE_KEY!,
-  { auth: { persistSession: false } }
-);
+// ⚠️ Lazy — não roda no build
+function getSupabaseAdmin() {
+  return createClient(
+    getSupabaseUrl(),
+    getSupabaseServiceRoleKey(),
+    { auth: { persistSession: false } }
+  );
+}
 
 const PLANO = {
   valor: 155.0,
@@ -44,6 +51,8 @@ export interface CriarAssinaturaInput {
 }
 
 export async function criarAssinatura(input: CriarAssinaturaInput) {
+  const supabaseAdmin = getSupabaseAdmin();
+
   const { userId, email, nome, cpfCnpj, telefone, billingType, nextDueDate } =
     input;
 
@@ -139,6 +148,8 @@ export async function criarAssinatura(input: CriarAssinaturaInput) {
 
 export async function cancelarAssinatura(userId: string) {
   if (!userId) throw new Error("userId é obrigatório");
+
+  const supabaseAdmin = getSupabaseAdmin();
 
   const { data: subscriber } = await supabaseAdmin
     .from("subscribers")

@@ -3,14 +3,20 @@ import { AlertTriangle, ArrowRight, Clock } from "lucide-react";
 import { createClient } from "@/lib/supabase/server";
 import { createClient as createAdminClient } from "@supabase/supabase-js";
 import { calcularStatusAssinatura } from "@/lib/subscription";
-import { SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY } from "@/lib/env";
+import {
+  getSupabaseUrl,
+  getSupabaseServiceRoleKey,
+} from "@/lib/env";
 import { Button } from "@/components/ui/button";
 
-const supabaseAdmin = createAdminClient(
-  SUPABASE_URL,
-  SUPABASE_SERVICE_ROLE_KEY,
-  { auth: { persistSession: false } }
-);
+// ⚠️ Lazy — não roda no build
+function getSupabaseAdmin() {
+  return createAdminClient(
+    getSupabaseUrl(),
+    getSupabaseServiceRoleKey(),
+    { auth: { persistSession: false } }
+  );
+}
 
 export async function SubscriptionBanner() {
   const supabase = await createClient();
@@ -19,6 +25,8 @@ export async function SubscriptionBanner() {
   } = await supabase.auth.getUser();
 
   if (!user) return null;
+
+  const supabaseAdmin = getSupabaseAdmin();
 
   const { data: subscriber } = await supabaseAdmin
     .from("subscribers")

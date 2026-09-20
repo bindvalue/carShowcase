@@ -1,19 +1,19 @@
 import { NextResponse } from "next/server";
 import { createClient } from "@supabase/supabase-js";
 import {
-  SUPABASE_URL,
-  SUPABASE_SERVICE_ROLE_KEY,
-  ASAAS_WEBHOOK_TOKEN,
+  getSupabaseUrl,
+  getSupabaseServiceRoleKey,
+  getAsaasWebhookToken,
 } from "@/lib/env";
 
-const WEBHOOK_TOKEN = ASAAS_WEBHOOK_TOKEN;
+// ... tipos ...
 const DIAS_TOLERANCIA_ATRASO = 5;
-
-// ⚠️ Cria o cliente DENTRO da função (lazy) — não no top-level
 function getSupabaseAdmin() {
-  return createClient(SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY, {
-    auth: { persistSession: false },
-  });
+  return createClient(
+    getSupabaseUrl(),
+    getSupabaseServiceRoleKey(),
+    { auth: { persistSession: false } }
+  );
 }
 
 interface AsaasPaymentPayload {
@@ -50,16 +50,16 @@ export async function POST(request: Request) {
   const inicio = Date.now();
 
   try {
-    if (!WEBHOOK_TOKEN) {
-      console.error("[Webhook Asaas] ASAAS_WEBHOOK_TOKEN não configurado");
-      return NextResponse.json({ error: "Config inválida" }, { status: 500 });
-    }
+    const webhookToken = getAsaasWebhookToken();
+      if (!webhookToken) {
+        console.error("[Webhook Asaas] Token não configurado");
+        return NextResponse.json({ error: "Config inválida" }, { status: 500 });
+      }
 
-    const token = request.headers.get("asaas-access-token");
-    if (token !== WEBHOOK_TOKEN) {
-      console.error("[Webhook Asaas] Token inválido");
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-    }
+      const token = request.headers.get("asaas-access-token");
+      if (token !== webhookToken) {
+        return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+      }
 
     const payload = (await request.json()) as AsaasWebhookPayload;
 

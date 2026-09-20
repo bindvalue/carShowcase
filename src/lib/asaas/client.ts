@@ -1,12 +1,12 @@
 import "server-only";
 import {
-  ASAAS_API_URL,
-  ASAAS_API_KEY,
-  ASAAS_IS_SANDBOX,
+  getAsaasApiUrl,
+  getAsaasApiKey,
+  isAsaasSandbox as isAsaasSandboxEnv,
 } from "@/lib/env";
 
 // ═══════════════════════════════════════════════════════
-// CONFIG
+// CONFIG (lazy — lê env vars quando chamado)
 // ═══════════════════════════════════════════════════════
 
 const REQUEST_TIMEOUT_MS = 15_000;
@@ -20,9 +20,9 @@ interface AsaasConfig {
 
 function getAsaasConfig(): AsaasConfig {
   return {
-    url: ASAAS_API_URL,
-    key: ASAAS_API_KEY,
-    isSandbox: ASAAS_IS_SANDBOX,
+    url: getAsaasApiUrl(),
+    key: getAsaasApiKey(),
+    isSandbox: isAsaasSandbox(),
   };
 }
 

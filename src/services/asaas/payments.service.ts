@@ -1,12 +1,19 @@
 import "server-only";
 import { createClient } from "@supabase/supabase-js";
 import { listAsaasPayments } from "@/lib/asaas/client";
+import {
+  getSupabaseUrl,
+  getSupabaseServiceRoleKey,
+} from "@/lib/env";
 
-const supabaseAdmin = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.SUPABASE_SERVICE_ROLE_KEY!,
-  { auth: { persistSession: false } }
-);
+// ⚠️ Lazy — não roda no build
+function getSupabaseAdmin() {
+  return createClient(
+    getSupabaseUrl(),
+    getSupabaseServiceRoleKey(),
+    { auth: { persistSession: false } }
+  );
+}
 
 export interface AsaasPayment {
   id: string;
@@ -24,6 +31,8 @@ export async function getHistoricoPagamentos(
   limit = 12
 ): Promise<AsaasPayment[]> {
   if (!userId) return [];
+
+  const supabaseAdmin = getSupabaseAdmin();
 
   const { data: subscriber, error } = await supabaseAdmin
     .from("subscribers")
