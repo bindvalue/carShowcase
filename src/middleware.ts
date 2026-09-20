@@ -92,7 +92,7 @@ export async function middleware(request: NextRequest) {
  * 
  * Por quê: o Cloudflare Workers (via OpenNext) às vezes serve o HTML
  * sem o `charset=utf-8` no Content-Type, fazendo o browser interpretar
- * os acentos como Latin-1 e mostrar "veÃ­culo" em vez de "veículo".
+ * os acentos como Latin-1 e mostrar "veículo" em vez de "veículo".
  * 
  * Só aplica em HTML — JSON, CSS, JS já vêm com charset correto.
  */

@@ -12,14 +12,14 @@ interface VehicleContactCardProps {
 }
 
 export function VehicleContactCard({ veiculo }: VehicleContactCardProps) {
-  // Mensagem prÃ©-formatada para o WhatsApp
-  const mensagem = `OlÃ¡! Tenho interesse no ${veiculo.marca} ${veiculo.modelo} ${veiculo.ano} (anÃºncio #${veiculo.id.slice(0, 8)}). Ainda estÃ¡ disponÃ­vel?`;
+  // Mensagem pré-formatada para o WhatsApp
+  const mensagem = `Olá! Tenho interesse no ${veiculo.marca} ${veiculo.modelo} ${veiculo.ano} (anúncio #${veiculo.id.slice(0, 8)}). Ainda está disponível?`;
 
-  // Usa o whatsapp_link do veÃ­culo ou o padrÃ£o do site
+  // Usa o whatsapp_link do veículo ou o padrão do site
   const whatsappNumber = veiculo.whatsapp_link || SITE_CONFIG.whatsappDefault;
   const whatsappUrl = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(mensagem)}`;
 
-  // SimulaÃ§Ã£o de parcela em 60x com juros
+  // Simulação de parcela em 60x com juros
   const parcela = (veiculo.preco * 1.15) / 60;
 
   const handleShare = async () => {
@@ -32,7 +32,7 @@ export function VehicleContactCard({ veiculo }: VehicleContactCardProps) {
           url: window.location.href,
         });
       } catch {
-        // UsuÃ¡rio cancelou o compartilhamento â€” silencioso
+        // Usuário cancelou o compartilhamento "” silencioso
       }
     } else {
       await navigator.clipboard.writeText(window.location.href);
@@ -42,7 +42,7 @@ export function VehicleContactCard({ veiculo }: VehicleContactCardProps) {
   return (
     <Card className="sticky top-24 border-border/60 overflow-hidden">
       <CardContent className="p-6">
-        {/* PreÃ§o */}
+        {/* Preço */}
         <div>
           <p className="text-sm text-muted-foreground">A partir de</p>
           <p className="text-3xl font-bold text-foreground">
@@ -56,7 +56,7 @@ export function VehicleContactCard({ veiculo }: VehicleContactCardProps) {
           </p>
         </div>
 
-        {/* BotÃµes principais */}
+        {/* Botões principais */}
         <div className="mt-6 space-y-3">
           <Button
             asChild
@@ -77,7 +77,7 @@ export function VehicleContactCard({ veiculo }: VehicleContactCardProps) {
           </Button>
         </div>
 
-        {/* AÃ§Ãµes secundÃ¡rias */}
+        {/* Ações secundárias */}
         <div className="mt-4 flex gap-2">
           <Button variant="ghost" size="sm" className="flex-1">
             <Heart className="mr-2 h-4 w-4" />
@@ -94,13 +94,13 @@ export function VehicleContactCard({ veiculo }: VehicleContactCardProps) {
           </Button>
         </div>
 
-        {/* Selo de confianÃ§a */}
+        {/* Selo de confiança */}
         <div className="mt-6 flex items-start gap-3 rounded-lg bg-muted/50 p-3">
           <Shield className="h-5 w-5 text-primary shrink-0 mt-0.5" />
           <div className="text-xs">
-            <p className="font-semibold">AnÃºncio verificado</p>
+            <p className="font-semibold">Anúncio verificado</p>
             <p className="text-muted-foreground mt-0.5">
-              DocumentaÃ§Ã£o e procedÃªncia conferidas pela nossa equipe.
+              Documentação e procedência conferidas pela nossa equipe.
             </p>
           </div>
         </div>

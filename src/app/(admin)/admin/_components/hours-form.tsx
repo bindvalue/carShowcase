@@ -81,10 +81,10 @@ export function HoursForm() {
       <CardHeader>
         <CardTitle className="text-base flex items-center gap-2">
           <Clock className="h-4 w-4 text-primary" />
-          HorÃƒÂ¡rio de Funcionamento
+          Horário de Funcionamento
         </CardTitle>
         <CardDescription>
-          Exibido no rodapÃƒÂ© do site.
+          Exibido no rodapé do site.
         </CardDescription>
       </CardHeader>
       <CardContent>
@@ -95,7 +95,7 @@ export function HoursForm() {
               <div>
                 <Label className="text-sm font-medium">Segunda a Sexta</Label>
                 <div className="text-xs text-muted-foreground mt-1">
-                  HorÃƒÂ¡rio de abertura
+                  Horário de abertura
                 </div>
               </div>
               <div className="flex items-center gap-2">
@@ -104,7 +104,7 @@ export function HoursForm() {
                   className="h-11 w-32"
                   {...register("hours_weekdays_open")}
                 />
-                <span className="text-muted-foreground">ÃƒÂ s</span>
+                <span className="text-muted-foreground">à s</span>
                 <Input
                   type="time"
                   className="h-11 w-32"
@@ -114,12 +114,12 @@ export function HoursForm() {
               <div />
             </div>
 
-            {/* SÃƒÂ¡bado */}
+            {/* Sábado */}
             <div className="grid grid-cols-[1fr_auto_1fr] items-end gap-3">
               <div>
-                <Label className="text-sm font-medium">SÃƒÂ¡bado</Label>
+                <Label className="text-sm font-medium">Sábado</Label>
                 <div className="text-xs text-muted-foreground mt-1">
-                  HorÃƒÂ¡rio de abertura
+                  Horário de abertura
                 </div>
               </div>
               <div className="flex items-center gap-2">
@@ -128,7 +128,7 @@ export function HoursForm() {
                   className="h-11 w-32"
                   {...register("hours_saturday_open")}
                 />
-                <span className="text-muted-foreground">ÃƒÂ s</span>
+                <span className="text-muted-foreground">à s</span>
                 <Input
                   type="time"
                   className="h-11 w-32"
@@ -149,7 +149,7 @@ export function HoursForm() {
                     <p className="text-xs text-muted-foreground mt-1">
                       {field.value
                         ? "Fechado"
-                        : "Aberto (configure o horÃƒÂ¡rio no admin)"}
+                        : "Aberto (configure o horário no admin)"}
                     </p>
                   </div>
                   <div className="flex items-center gap-3">
@@ -180,7 +180,7 @@ export function HoursForm() {
               ) : (
                 <>
                   <Save className="mr-2 h-4 w-4" />
-                  Salvar horÃƒÂ¡rios
+                  Salvar horários
                 </>
               )}
             </Button>

@@ -39,7 +39,7 @@ export function VehicleFilters({ onClose }: VehicleFiltersProps) {
   const { data: modelos = [], isLoading: loadingModelos } =
     useModelos(marcaIdSelecionada);
 
-  // â”€â”€â”€ SeleÃ§Ãµes atuais â”€â”€â”€
+  // â”€â”€â”€ Seleções atuais â”€â”€â”€
   const modelosSelecionados = getParam("modelo");
   const cambioSelecionado = getParam("cambio");
   const combustivelSelecionado = getParam("combustivel");
@@ -85,8 +85,8 @@ export function VehicleFilters({ onClose }: VehicleFiltersProps) {
         <VehicleTypeToggle />
       </div>
 
-      {/* LocalizaÃ§Ã£o */}
-      <FilterSection title="LocalizaÃ§Ã£o">
+      {/* Localização */}
+      <FilterSection title="Localização">
         <LocationFilter />
       </FilterSection>
 
@@ -150,8 +150,8 @@ export function VehicleFilters({ onClose }: VehicleFiltersProps) {
         )}
       </FilterSection>
 
-      {/* PreÃ§o */}
-      <FilterSection title="PreÃ§o">
+      {/* Preço */}
+      <FilterSection title="Preço">
         <PriceRangeFilter
           min={0}
           max={500000}
@@ -183,8 +183,8 @@ export function VehicleFilters({ onClose }: VehicleFiltersProps) {
         />
       </FilterSection>
 
-      {/* CÃ¢mbio */}
-      <FilterSection title="CÃ¢mbio" defaultOpen={false}>
+      {/* Câmbio */}
+      <FilterSection title="Câmbio" defaultOpen={false}>
         <div className="space-y-2">
           {CAMBIO_OPTIONS.map((opt) => (
             <label
@@ -201,8 +201,8 @@ export function VehicleFilters({ onClose }: VehicleFiltersProps) {
         </div>
       </FilterSection>
 
-      {/* CombustÃ­vel */}
-      <FilterSection title="CombustÃ­vel" defaultOpen={false}>
+      {/* Combustível */}
+      <FilterSection title="Combustível" defaultOpen={false}>
         <div className="space-y-2">
           {COMBUSTIVEL_OPTIONS.map((opt) => (
             <label

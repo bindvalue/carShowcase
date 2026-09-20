@@ -76,7 +76,7 @@ export function WhatsAppForm() {
           WhatsApp Flutuante
         </CardTitle>
         <CardDescription>
-          BotÃƒÂ£o de contato exibido em todas as pÃƒÂ¡ginas do site.
+          Botão de contato exibido em todas as páginas do site.
         </CardDescription>
       </CardHeader>
       <CardContent>
@@ -89,11 +89,11 @@ export function WhatsAppForm() {
               <div className="flex items-center justify-between rounded-lg border p-4">
                 <div>
                   <p className="font-medium text-sm">
-                    Exibir botÃƒÂ£o flutuante
+                    Exibir botão flutuante
                   </p>
                   <p className="text-xs text-muted-foreground mt-1">
-                    Quando ativo, aparece um botÃƒÂ£o de WhatsApp no canto
-                    inferior direito de todas as pÃƒÂ¡ginas.
+                    Quando ativo, aparece um botão de WhatsApp no canto
+                    inferior direito de todas as páginas.
                   </p>
                 </div>
                 <Switch
@@ -106,7 +106,7 @@ export function WhatsAppForm() {
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="space-y-2">
-              <Label htmlFor="whatsapp_number">NÃƒÂºmero (com DDI)</Label>
+              <Label htmlFor="whatsapp_number">Número (com DDI)</Label>
               <Input
                 id="whatsapp_number"
                 placeholder="5531993908081"
@@ -114,12 +114,12 @@ export function WhatsAppForm() {
                 {...register("whatsapp_number")}
               />
               <p className="text-xs text-muted-foreground">
-                Formato: 55 + DDD + nÃƒÂºmero (sem espaÃƒÂ§os ou traÃƒÂ§os)
+                Formato: 55 + DDD + número (sem espaços ou traços)
               </p>
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="whatsapp_label">RÃƒÂ³tulo do botÃƒÂ£o</Label>
+              <Label htmlFor="whatsapp_label">Rótulo do botão</Label>
               <Input
                 id="whatsapp_label"
                 placeholder="Fale conosco"
@@ -133,12 +133,12 @@ export function WhatsAppForm() {
             <Label htmlFor="whatsapp_message">Mensagem inicial</Label>
             <Textarea
               id="whatsapp_message"
-              placeholder="OlÃƒÂ¡! Vi o site e gostaria de mais informaÃƒÂ§ÃƒÂµes."
+              placeholder="Olá! Vi o site e gostaria de mais informações."
               rows={3}
               {...register("whatsapp_message")}
             />
             <p className="text-xs text-muted-foreground">
-              Texto prÃƒÂ©-preenchido ao abrir a conversa no WhatsApp.
+              Texto pré-preenchido ao abrir a conversa no WhatsApp.
             </p>
           </div>
 

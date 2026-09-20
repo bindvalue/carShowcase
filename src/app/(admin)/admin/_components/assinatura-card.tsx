@@ -97,14 +97,14 @@ export function AssinaturaCard({
           <div className="flex items-center justify-between">
             <CardTitle className="text-base flex items-center gap-2">
               <CheckCircle2 className="h-5 w-5 text-green-600" />
-              Acesso VitalÃ­cio
+              Acesso Vitalício
             </CardTitle>
             <Badge className="bg-green-600 hover:bg-green-600">
-              Sem expiraÃ§Ã£o
+              Sem expiração
             </Badge>
           </div>
           <CardDescription>
-            VocÃª tem acesso vitalÃ­cio ao sistema. Nenhuma cobranÃ§a serÃ¡ feita.
+            Você tem acesso vitalício ao sistema. Nenhuma cobrança será feita.
           </CardDescription>
         </CardHeader>
       </Card>
@@ -128,8 +128,8 @@ export function AssinaturaCard({
         </CardHeader>
         <CardContent>
           <p className="text-sm text-muted-foreground mb-4">
-            Plano Ãºnico: <strong>{PLANO.valorFormatado}/mÃªs</strong> com
-            vencimento no dia que vocÃª escolher (atÃ© dia 15).
+            Plano único: <strong>{PLANO.valorFormatado}/mês</strong> com
+            vencimento no dia que você escolher (até dia 15).
           </p>
         </CardContent>
       </Card>
@@ -176,17 +176,17 @@ export function AssinaturaCard({
             </div>
 
             <div className="space-y-1">
-              <p className="text-xs text-muted-foreground">VÃ¡lido atÃ©</p>
+              <p className="text-xs text-muted-foreground">Válido até</p>
               <p className="text-lg font-bold flex items-center gap-2">
                 <Calendar className="h-4 w-4 text-primary" />
-                {vencimento ? vencimento.toLocaleDateString("pt-BR") : "â€”"}
+                {vencimento ? vencimento.toLocaleDateString("pt-BR") : "—"}
               </p>
             </div>
 
             {status.nextDueDate && (
               <div className="space-y-1">
                 <p className="text-xs text-muted-foreground">
-                  PrÃ³ximo vencimento
+                  Próximo vencimento
                 </p>
                 <p className="text-sm font-medium">
                   {new Date(status.nextDueDate).toLocaleDateString("pt-BR")}
@@ -201,7 +201,7 @@ export function AssinaturaCard({
                 </p>
                 <p className="text-sm font-medium">
                   {new Date(status.lastPaymentAt).toLocaleDateString("pt-BR")}{" "}
-                  Â· {formatBRL(status.lastPaymentValue || 0)}
+                  · {formatBRL(status.lastPaymentValue || 0)}
                 </p>
               </div>
             )}
@@ -227,7 +227,7 @@ export function AssinaturaCard({
                         pagamentoPendente.dueDate + "T00:00:00"
                       ).toLocaleDateString("pt-BR")}
                     </span>{" "}
-                    Â· Valor{" "}
+                    · Valor{" "}
                     <span className="text-foreground font-medium">
                       {formatBRL(pagamentoPendente.value)}
                     </span>
@@ -253,12 +253,12 @@ export function AssinaturaCard({
               )}
 
               <p className="text-[11px] text-muted-foreground text-center">
-                O acesso Ã© liberado automaticamente apÃ³s a confirmaÃ§Ã£o.
+                O acesso é liberado automaticamente após a confirmação.
               </p>
             </div>
           )}
 
-          {/* â”€â”€â”€ AÃ§Ãµes â”€â”€â”€ */}
+          {/* â”€â”€â”€ Ações â”€â”€â”€ */}
           <div className="flex flex-col sm:flex-row gap-3 pt-4 border-t">
             <Button
               variant="outline"
@@ -283,16 +283,16 @@ export function AssinaturaCard({
             <DialogDescription asChild>
               <div className="space-y-2">
                 <p>
-                  Ao cancelar, vocÃª manterÃ¡ acesso atÃ©{" "}
+                  Ao cancelar, você manterá acesso até{" "}
                   <strong>
                     {vencimento
                       ? vencimento.toLocaleDateString("pt-BR")
-                      : "o fim do perÃ­odo atual"}
+                      : "o fim do período atual"}
                   </strong>
-                  . Depois disso, o sistema serÃ¡ bloqueado.
+                  . Depois disso, o sistema será bloqueado.
                 </p>
                 <p className="text-xs text-muted-foreground">
-                  VocÃª pode reativar a qualquer momento.
+                  Você pode reativar a qualquer momento.
                 </p>
               </div>
             </DialogDescription>

@@ -232,8 +232,14 @@ function HomeContent() {
           <p className="mt-3 text-muted-foreground max-w-2xl mx-auto">
             Fale com nossa equipe e encontraremos o veículo ideal para você.
           </p>
-          <Button size="lg" className="mt-6">
-            Falar com um especialista
+          <Button size="lg" className="mt-6" asChild>
+            <a
+              href="https://wa.me/5531993908081?text=Olá! Vi o site da Wancar Veículos e gostaria de mais informações sobre um veículo."
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Falar com um especialista
+            </a>
           </Button>
         </div>
       </section>

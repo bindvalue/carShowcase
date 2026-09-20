@@ -15,13 +15,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
+import { Combobox } from "@/components/ui/combobox";
 import { StatCard } from "./stat-card";
 import { VehicleRow } from "./vehicle-row";
 import { VehicleEditModal } from "./vehicle-edit-sheet";
@@ -33,15 +27,20 @@ import {
 import { useDebounce } from "@/hooks/use-debounce";
 import type { Veiculo } from "@/types/veiculo";
 
+type StatusVeiculo =
+  | "em_estoque"
+  | "despublicados"
+  | "vendidos"
+  | "removidos"
+  | "todos";
+
+type Ordenacao = "recentes" | "antigos" | "preco-asc" | "preco-desc";
+
 export function VeiculosPageClient() {
   const [search, setSearch] = useState("");
-  const [statusVeiculo, setStatusVeiculo] = useState<
-    "em_estoque" | "despublicados" | "vendidos" | "removidos" | "todos"
-  >("em_estoque");
+  const [statusVeiculo, setStatusVeiculo] = useState<StatusVeiculo>("em_estoque");
   const [marca, setMarca] = useState("todas");
-  const [ordenacao, setOrdenacao] = useState<
-    "recentes" | "antigos" | "preco-asc" | "preco-desc"
-  >("recentes");
+  const [ordenacao, setOrdenacao] = useState<Ordenacao>("recentes");
   const [page, setPage] = useState(1);
 
   const [editingVeiculo, setEditingVeiculo] = useState<Veiculo | null>(null);
@@ -72,9 +71,44 @@ export function VeiculosPageClient() {
     setEditSheetOpen(true);
   };
 
+  const opcoesStatus = [
+    {
+      value: "em_estoque",
+      label: `Em estoque${counts ? ` (${counts.emEstoque})` : ""}`,
+    },
+    {
+      value: "despublicados",
+      label: `Despublicados${counts ? ` (${counts.despublicados})` : ""}`,
+    },
+    {
+      value: "vendidos",
+      label: `Vendidos${counts ? ` (${counts.vendidos})` : ""}`,
+    },
+    {
+      value: "removidos",
+      label: `Removidos${counts ? ` (${counts.removidos})` : ""}`,
+    },
+    {
+      value: "todos",
+      label: `Todos os status${counts ? ` (${counts.total})` : ""}`,
+    },
+  ];
+
+  const opcoesMarcas = [
+    { value: "todas", label: "Todas as marcas" },
+    ...marcas.map((m) => ({ value: m, label: m })),
+  ];
+
+  const opcoesOrdenacao = [
+    { value: "recentes", label: "Mais recentes" },
+    { value: "antigos", label: "Mais antigos" },
+    { value: "preco-desc", label: "Maior preço" },
+    { value: "preco-asc", label: "Menor preço" },
+  ];
+
   return (
     <div className="p-6 md:p-8 space-y-6">
-      {/* â•â•â•â•â•â•â•â•â•â•â• HEADER â•â•â•â•â•â•â•â•â•â•â• */}
+      {/* ═══════════ HEADER ═══════════ */}
       <div className="space-y-6">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <div>
@@ -82,10 +116,10 @@ export function VeiculosPageClient() {
               <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-primary/10">
                 <Package className="h-5 w-5 text-primary" />
               </div>
-              VeÃ­culos
+              Veículos
             </h1>
             <p className="text-sm text-muted-foreground mt-2 ml-11">
-              Gerencie seu estoque de veÃ­culos
+              Gerencie seu estoque de veículos
             </p>
           </div>
           <Button
@@ -96,15 +130,14 @@ export function VeiculosPageClient() {
             className="h-11 px-5"
           >
             <Plus className="mr-2 h-4 w-4" />
-            Novo veÃ­culo
+            Novo veículo
           </Button>
         </div>
 
-        {/* Cards de indicadores */}
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3">
           <StatCard
             label="Em estoque"
-            sublabel="DisponÃ­veis"
+            sublabel="Disponíveis"
             value={counts?.emEstoque ?? 0}
             icon={CheckCircle2}
             tone="green"
@@ -128,7 +161,7 @@ export function VeiculosPageClient() {
           />
           <StatCard
             label="Vendidos"
-            sublabel="HistÃ³rico"
+            sublabel="Histórico"
             value={counts?.vendidos ?? 0}
             icon={ShoppingCart}
             tone="blue"
@@ -165,12 +198,12 @@ export function VeiculosPageClient() {
         </div>
       </div>
 
-      {/* Barra de filtros */}
+      {/* ═══════════ BARRA DE FILTROS ═══════════ */}
       <div className="flex flex-col lg:flex-row gap-3">
         <div className="relative flex-1">
           <Search className="absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground pointer-events-none" />
           <Input
-            placeholder="Buscar por marca, modelo ou descriÃ§Ã£o..."
+            placeholder="Buscar por marca, modelo ou descrição..."
             value={search}
             onChange={(e) => {
               setSearch(e.target.value);
@@ -181,76 +214,45 @@ export function VeiculosPageClient() {
         </div>
 
         <div className="flex flex-wrap gap-3">
-          <Select
+          <Combobox
+            options={opcoesStatus}
             value={statusVeiculo}
-            onValueChange={(v) => {
-              setStatusVeiculo(v as typeof statusVeiculo);
+            onChange={(v) => {
+              setStatusVeiculo(v as StatusVeiculo);
               resetPage();
             }}
-          >
-            <SelectTrigger className="h-11 w-[200px] rounded-lg border-border/60">
-              <SelectValue />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="em_estoque">
-                ðŸ“¦ Em estoque {counts ? `(${counts.emEstoque})` : ""}
-              </SelectItem>
-              <SelectItem value="despublicados">
-                ðŸ“ Despublicados {counts ? `(${counts.despublicados})` : ""}
-              </SelectItem>
-              <SelectItem value="vendidos">
-                âœ… Vendidos {counts ? `(${counts.vendidos})` : ""}
-              </SelectItem>
-              <SelectItem value="removidos">
-                ðŸ—‘ï¸ Removidos {counts ? `(${counts.removidos})` : ""}
-              </SelectItem>
-              <SelectItem value="todos">
-                ðŸ”Ž Todos os status {counts ? `(${counts.total})` : ""}
-              </SelectItem>
-            </SelectContent>
-          </Select>
+            placeholder="Status"
+            searchPlaceholder="Buscar status..."
+            className="w-[200px]"
+          />
 
-          <Select
+          <Combobox
+            options={opcoesMarcas}
             value={marca}
-            onValueChange={(v) => {
+            onChange={(v) => {
               setMarca(v);
               resetPage();
             }}
-          >
-            <SelectTrigger className="h-11 w-[180px] rounded-lg border-border/60">
-              <SelectValue placeholder="Marca" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="todas">Todas as marcas</SelectItem>
-              {marcas.map((m) => (
-                <SelectItem key={m} value={m}>
-                  {m}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
+            placeholder="Marca"
+            searchPlaceholder="Buscar marca..."
+            className="w-[180px]"
+          />
 
-          <Select
+          <Combobox
+            options={opcoesOrdenacao}
             value={ordenacao}
-            onValueChange={(v) => {
-              setOrdenacao(v as typeof ordenacao);
+            onChange={(v) => {
+              setOrdenacao(v as Ordenacao);
               resetPage();
             }}
-          >
-            <SelectTrigger className="h-11 w-[180px] rounded-lg border-border/60">
-              <SelectValue />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="recentes">Mais recentes</SelectItem>
-              <SelectItem value="antigos">Mais antigos</SelectItem>
-              <SelectItem value="preco-desc">Maior preÃ§o</SelectItem>
-              <SelectItem value="preco-asc">Menor preÃ§o</SelectItem>
-            </SelectContent>
-          </Select>
+            placeholder="Ordenar"
+            searchPlaceholder="Buscar ordenação..."
+            className="w-[180px]"
+          />
         </div>
       </div>
 
-      {/* Lista */}
+      {/* ═══════════ LISTA ═══════════ */}
       <Card className="border-border/60 overflow-hidden">
         {isLoading ? (
           <div className="p-4 space-y-3">
@@ -262,14 +264,14 @@ export function VeiculosPageClient() {
           <div className="flex flex-col items-center justify-center py-16 text-center">
             <Package className="h-12 w-12 text-muted-foreground/40" />
             <p className="mt-4 text-lg font-semibold">
-              Nenhum veÃ­culo encontrado
+              Nenhum veículo encontrado
             </p>
             <p className="mt-2 text-sm text-muted-foreground">
               {debouncedSearch ||
               marca !== "todas" ||
               statusVeiculo !== "em_estoque"
                 ? "Tente ajustar os filtros."
-                : "Comece cadastrando seu primeiro veÃ­culo."}
+                : "Comece cadastrando seu primeiro veículo."}
             </p>
             <Button
               onClick={() => {
@@ -279,7 +281,7 @@ export function VeiculosPageClient() {
               className="mt-4 h-11"
             >
               <Plus className="mr-2 h-4 w-4" />
-              Cadastrar veÃ­culo
+              Cadastrar veículo
             </Button>
           </div>
         ) : (
@@ -293,7 +295,7 @@ export function VeiculosPageClient() {
             {totalPages > 1 && (
               <div className="flex items-center justify-between border-t p-4">
                 <p className="text-xs text-muted-foreground">
-                  PÃ¡gina {page} de {totalPages} Â· {total} veÃ­culos
+                  Página {page} de {totalPages} · {total} veículos
                 </p>
                 <div className="flex gap-2">
                   <Button
@@ -312,7 +314,7 @@ export function VeiculosPageClient() {
                     disabled={page === totalPages}
                     className="h-9"
                   >
-                    PrÃ³xima
+                    Próxima
                   </Button>
                 </div>
               </div>

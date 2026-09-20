@@ -9,12 +9,12 @@ export function Footer() {
     <footer className="border-t bg-muted/30 mt-auto">
       <div className="container mx-auto px-4 py-12">
         <div className="grid grid-cols-1 gap-10 md:grid-cols-2 lg:grid-cols-4">
-          {/* COLUNA 1: Marca + endereÃ§o */}
+          {/* COLUNA 1: Marca + endereço */}
           <div className="space-y-4">
             <Link href="/" className="inline-flex items-center shrink-0">
               <Image
                 src="/logo_.png"
-                alt="Wancar VeÃ­culos"
+                alt="Wancar Veículos"
                 width={160}
                 height={48}
                 className="h-16 w-auto object-contain"
@@ -22,8 +22,8 @@ export function Footer() {
             </Link>
 
             <p className="text-sm text-muted-foreground leading-relaxed">
-              A vitrine de veÃ­culos mais moderna do Brasil. Qualidade e
-              procedÃªncia garantidas.
+              A vitrine de veículos mais moderna do Brasil. Qualidade e
+              procedência garantidas.
             </p>
 
             <div className="flex items-start gap-2 text-sm text-muted-foreground">
@@ -36,13 +36,13 @@ export function Footer() {
             </div>
           </div>
 
-          {/* COLUNA 2: NavegaÃ§Ã£o */}
+          {/* COLUNA 2: Navegação */}
           <div>
-            <h3 className="font-semibold mb-4">NavegaÃ§Ã£o</h3>
+            <h3 className="font-semibold mb-4">Navegação</h3>
             <ul className="space-y-2.5 text-sm text-muted-foreground">
               <li>
                 <Link href="/" className="hover:text-foreground transition-colors">
-                  InÃ­cio
+                  Início
                 </Link>
               </li>
               <li>
@@ -50,7 +50,7 @@ export function Footer() {
                   href="/veiculos"
                   className="hover:text-foreground transition-colors"
                 >
-                  Estoque de veÃ­culos
+                  Estoque de veículos
                 </Link>
               </li>
               <li>
@@ -58,7 +58,7 @@ export function Footer() {
                   href="/sobre"
                   className="hover:text-foreground transition-colors"
                 >
-                  Sobre nÃ³s
+                  Sobre nós
                 </Link>
               </li>
               <li>
@@ -108,20 +108,20 @@ export function Footer() {
             </ul>
           </div>
 
-          {/* COLUNA 4: HorÃ¡rio de funcionamento */}
+          {/* COLUNA 4: Horário */}
           <div>
             <h3 className="font-semibold mb-4 flex items-center gap-2">
               <Clock className="h-4 w-4 text-primary" />
-              HorÃ¡rio de Funcionamento
+              Horário de Funcionamento
             </h3>
             <ul className="space-y-2.5 text-sm text-muted-foreground">
               <li className="flex items-start justify-between gap-3">
                 <span className="font-medium text-foreground">Seg a Sex</span>
-                <span>08h Ã s 18h</span>
+                <span>08h às 18h</span>
               </li>
               <li className="flex items-start justify-between gap-3">
-                <span className="font-medium text-foreground">SÃ¡bado</span>
-                <span>08h Ã s 12h</span>
+                <span className="font-medium text-foreground">Sábado</span>
+                <span>08h às 12h</span>
               </li>
               <li className="flex items-start justify-between gap-3">
                 <span className="font-medium text-foreground">Domingo</span>
@@ -131,12 +131,12 @@ export function Footer() {
           </div>
         </div>
 
-        {/* Linha divisÃ³ria + copyright */}
-        <div className="mt-10 border-t pt-6 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-muted-foreground">
-          <p>
-            Wancar VeÃ­culos Â© {currentYear} â€” Todos os direitos reservados.
+        {/* ═══════════ RODAPÉ / COPYRIGHT ═══════════ */}
+        <div className="mt-10 pt-6 border-t flex flex-col sm:flex-row items-center justify-between gap-3">
+          <p className="text-xs text-muted-foreground">
+            Wancar Veículos © {currentYear} — Todos os direitos reservados.
           </p>
-          <p>
+          <p className="text-xs text-muted-foreground">
             Desenvolvido por{" "}
             <a
               href="https://bindvalue.dev"

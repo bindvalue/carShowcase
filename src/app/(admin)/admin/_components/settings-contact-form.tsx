@@ -21,7 +21,7 @@ import { useSettings, useUpdateSettings } from "@/hooks/use-settings";
 const schema = z.object({
   contact_phone: z.string().optional().nullable(),
   contact_whatsapp: z.string().optional().nullable(),
-  contact_email: z.string().email("Email invÃƒÂ¡lido").optional().nullable().or(z.literal("")),
+  contact_email: z.string().email("Email inválido").optional().nullable().or(z.literal("")),
   contact_address_street: z.string().optional().nullable(),
   contact_address_city: z.string().optional().nullable(),
   contact_address_state: z.string().max(2).optional().nullable(),
@@ -78,10 +78,10 @@ export function ContactForm() {
       <CardHeader>
         <CardTitle className="text-base flex items-center gap-2">
           <Phone className="h-4 w-4 text-primary" />
-          Contato e LocalizaÃƒÂ§ÃƒÂ£o
+          Contato e Localização
         </CardTitle>
         <CardDescription>
-          InformaÃƒÂ§ÃƒÂµes exibidas no rodapÃƒÂ© e na pÃƒÂ¡gina de contato.
+          Informações exibidas no rodapé e na página de contato.
         </CardDescription>
       </CardHeader>
       <CardContent>
@@ -125,15 +125,15 @@ export function ContactForm() {
             </div>
           </div>
 
-          {/* EndereÃƒÂ§o */}
+          {/* Endereço */}
           <div>
             <p className="text-sm font-medium mb-3 flex items-center gap-2">
               <MapPin className="h-4 w-4 text-primary" />
-              EndereÃƒÂ§o
+              Endereço
             </p>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div className="space-y-2 md:col-span-2">
-                <Label htmlFor="contact_address_street">Rua e nÃƒÂºmero</Label>
+                <Label htmlFor="contact_address_street">Rua e número</Label>
                 <Input
                   id="contact_address_street"
                   placeholder="Rua Mato Grosso, 349"

@@ -48,7 +48,7 @@ export function VehicleOpcionaisManager({
     }, {});
   }, [opcionais]);
 
-  // Verifica se jÃ¡ adicionado
+  // Verifica se já adicionado
   const isAdicionado = (nome: string) =>
     value.some((v) => v.toLowerCase() === nome.toLowerCase());
 
@@ -79,7 +79,7 @@ export function VehicleOpcionaisManager({
     onChange(value.filter((v) => v !== item));
   };
 
-  // Cria novo opcional no banco e adiciona ao veÃ­culo
+  // Cria novo opcional no banco e adiciona ao veículo
   const handleCreateAndAdd = async () => {
     const nome = (search || customInput).trim();
     if (!nome) return;
@@ -233,7 +233,7 @@ export function VehicleOpcionaisManager({
                       )
                     )}
 
-                    {/* Criar item quando busca nÃ£o existe */}
+                    {/* Criar item quando busca não existe */}
                     {search.trim() && !buscaExiste && !isLoading && (
                       <>
                         <CommandSeparator />

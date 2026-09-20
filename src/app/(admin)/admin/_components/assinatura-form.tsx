@@ -53,7 +53,7 @@ export function AssinaturaForm() {
       }
 
       toast.success("Assinatura criada!", {
-        description: `PrÃ³ximo vencimento: ${result.nextDueDate}`,
+        description: `Próximo vencimento: ${result.nextDueDate}`,
       });
 
       window.location.reload();
@@ -69,12 +69,12 @@ export function AssinaturaForm() {
         <CardHeader className="pb-4">
           <CardTitle className="text-base font-semibold">Seus dados</CardTitle>
           <CardDescription className="text-[13px]">
-            NecessÃ¡rios para emissÃ£o do documento fiscal e contato.
+            Necessários para emissão do documento fiscal e contato.
           </CardDescription>
         </CardHeader>
         <CardContent className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <FormField
-            label="Nome completo / RazÃ£o social"
+            label="Nome completo / Razão social"
             htmlFor="nome"
             required
             error={erroDe("nome")}
@@ -115,7 +115,7 @@ export function AssinaturaForm() {
           <FormField
             label="Dia de vencimento"
             required
-            hint="Escolha entre 1 e 15. VocÃª serÃ¡ cobrado todo mÃªs nesse dia."
+            hint="Escolha entre 1 e 15. Você será cobrado todo mês nesse dia."
           >
             <Combobox
               options={OPCOES_DIA}
@@ -135,7 +135,7 @@ export function AssinaturaForm() {
             Forma de pagamento
           </CardTitle>
           <CardDescription className="text-[13px]">
-            VocÃª pode trocar depois a qualquer momento.
+            Você pode trocar depois a qualquer momento.
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
@@ -152,21 +152,21 @@ export function AssinaturaForm() {
               onClick={() => setBillingType("BOLETO")}
               icon={<FileText className="h-5 w-5" />}
               title="Boleto"
-              subtitle="Vence em 3 dias Ãºteis"
+              subtitle="Vence em 3 dias úteis"
             />
             <PaymentOption
               active={billingType === "CREDIT_CARD"}
               onClick={() => setBillingType("CREDIT_CARD")}
               icon={<CreditCard className="h-5 w-5" />}
-              title="CartÃ£o"
-              subtitle="CobranÃ§a recorrente"
+              title="Cartão"
+              subtitle="Cobrança recorrente"
             />
           </div>
 
           {billingType === "CREDIT_CARD" && (
             <div className="space-y-4 pt-4 border-t">
               <FormField
-                label="NÃºmero do cartÃ£o"
+                label="Número do cartão"
                 htmlFor="cardNumber"
                 required
                 error={erroDe("cardNumber")}
@@ -182,7 +182,7 @@ export function AssinaturaForm() {
               </FormField>
 
               <FormField
-                label="Nome impresso no cartÃ£o"
+                label="Nome impresso no cartão"
                 htmlFor="cardHolder"
                 required
                 error={erroDe("cardHolder")}
@@ -190,14 +190,14 @@ export function AssinaturaForm() {
                 <Input
                   id="cardHolder"
                   name="cardHolder"
-                  placeholder="Como estÃ¡ impresso"
+                  placeholder="Como está impresso"
                   required
                 />
               </FormField>
 
               <div className="grid grid-cols-3 gap-3">
                 <FormField
-                  label="MÃªs"
+                  label="Mês"
                   htmlFor="cardExpiryMonth"
                   required
                   error={erroDe("cardExpiryMonth")}
@@ -251,7 +251,7 @@ export function AssinaturaForm() {
                   />
                 </FormField>
                 <FormField
-                  label="NÃºmero"
+                  label="Número"
                   htmlFor="holderAddressNumber"
                   required
                 >
@@ -280,7 +280,7 @@ export function AssinaturaForm() {
             </span>
           </div>
           <p className="text-[12px] text-muted-foreground">
-            A primeira cobranÃ§a Ã© gerada agora. A prÃ³xima serÃ¡ no dia de
+            A primeira cobrança é gerada agora. A próxima será no dia de
             vencimento escolhido.
           </p>
             <Button

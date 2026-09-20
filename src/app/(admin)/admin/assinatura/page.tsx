@@ -14,7 +14,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { AssinaturaPendenteAviso } from "../_components/assinatura-pendente-aviso";
 
 // â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
-// CONTEÃšDO (server component assÃ­ncrono)
+// CONTEÃšDO (server component assíncrono)
 // â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
 
 async function AssinaturaContent() {
@@ -36,14 +36,14 @@ async function AssinaturaContent() {
 
   // â•â•â•â•â•â•â•â•â•â•â• 3 ESTADOS â•â•â•â•â•â•â•â•â•â•â•
   // 1. Nunca assinou â†’ mostra form + aviso "sem assinatura"
-  // 2. Assinou mas inadimplente â†’ aviso "inativo" + histÃ³rico
+  // 2. Assinou mas inadimplente â†’ aviso "inativo" + histórico
   // 3. Ativo â†’ card normal
 
   const nuncaAssinou = !status.temAssinatura && !status.isLifetime;
   const inadimplente =
     status.temAssinatura && !status.subscribed && !status.isLifetime;
 
-  // Aviso aparece em QUALQUER caso onde o acesso estÃ¡ bloqueado
+  // Aviso aparece em QUALQUER caso onde o acesso está bloqueado
   const mostrarAviso = !status.isLifetime && (nuncaAssinou || inadimplente);
 
   return (
@@ -57,10 +57,10 @@ async function AssinaturaContent() {
         pagamentoPendente={pagamentoPendente}
       />
 
-      {/* FormulÃ¡rio sÃ³ se nunca assinou */}
+      {/* Formulário só se nunca assinou */}
       {nuncaAssinou && <AssinaturaForm />}
 
-      {/* HistÃ³rico sempre que tiver pagamento */}
+      {/* Histórico sempre que tiver pagamento */}
       {pagamentos.length > 0 && <AssinaturaHistory pagamentos={pagamentos} />}
     </div>
   );

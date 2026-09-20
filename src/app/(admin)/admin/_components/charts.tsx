@@ -23,10 +23,10 @@ import {
 // HELPERS
 // â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
 
-/** Trunca nomes longos de marca: "Mercedes-Benz" â†’ "Mercedesâ€¦" */
+/** Trunca nomes longos de marca: "Mercedes-Benz" â†’ "Mercedes"¦" */
 function truncarLabel(nome: string, max = 10): string {
   if (!nome) return "";
-  return nome.length > max ? `${nome.slice(0, max)}â€¦` : nome;
+  return nome.length > max ? `${nome.slice(0, max)}"¦` : nome;
 }
 
 // â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
@@ -77,7 +77,7 @@ function ChartTooltip({
 }
 
 // â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
-// GRÃFICO 1 â€” VEÃCULOS POR MARCA
+// GRÃFICO 1 "” VEÃCULOS POR MARCA
 // â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
 
 export function VeiculosPorMarcaChart() {
@@ -93,10 +93,10 @@ export function VeiculosPorMarcaChart() {
     <Card className="border-border/60">
       <CardHeader className="pb-2">
         <CardTitle className="text-base font-semibold">
-          VeÃ­culos por marca
+          Veículos por marca
         </CardTitle>
         <p className="text-xs text-muted-foreground">
-          Top {data?.length ?? 0} marcas com mais veÃ­culos ativos
+          Top {data?.length ?? 0} marcas com mais veículos ativos
         </p>
       </CardHeader>
 
@@ -109,7 +109,7 @@ export function VeiculosPorMarcaChart() {
               data={data ?? []}
               margin={{ top: 8, right: 8, left: -16, bottom: 0 }}
             >
-              {/* Grid sÃ³ na horizontal, discreto */}
+              {/* Grid só na horizontal, discreto */}
               <CartesianGrid
                 vertical={false}
                 stroke="hsl(var(--border))"
@@ -136,7 +136,7 @@ export function VeiculosPorMarcaChart() {
 
               <Tooltip
                 cursor={{ fill: "hsl(var(--muted))", opacity: 0.4 }}
-                content={<ChartTooltip labelPrefix="" unit="veÃ­culos" />}
+                content={<ChartTooltip labelPrefix="" unit="veículos" />}
               />
 
               <Bar
@@ -155,7 +155,7 @@ export function VeiculosPorMarcaChart() {
 }
 
 // â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
-// GRÃFICO 2 â€” CADASTROS NOS ÃšLTIMOS 30 DIAS
+// GRÃFICO 2 "” CADASTROS NOS ÃšLTIMOS 30 DIAS
 // â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
 
 export function CadastrosUltimos30DiasChart() {
@@ -174,10 +174,10 @@ export function CadastrosUltimos30DiasChart() {
         <div className="flex items-start justify-between gap-3">
           <div>
             <CardTitle className="text-base font-semibold">
-              Cadastros nos Ãºltimos 30 dias
+              Cadastros nos últimos 30 dias
             </CardTitle>
             <p className="text-xs text-muted-foreground">
-              {total} {total === 1 ? "cadastro" : "cadastros"} no perÃ­odo
+              {total} {total === 1 ? "cadastro" : "cadastros"} no período
             </p>
           </div>
         </div>
@@ -208,7 +208,7 @@ export function CadastrosUltimos30DiasChart() {
                 </linearGradient>
               </defs>
 
-              {/* Grid sÃ³ na horizontal */}
+              {/* Grid só na horizontal */}
               <CartesianGrid
                 vertical={false}
                 stroke="hsl(var(--border))"
@@ -272,7 +272,7 @@ function EmptyChart() {
   return (
     <div className="flex h-[260px] flex-col items-center justify-center text-center">
       <p className="text-sm text-muted-foreground">
-        Sem dados no perÃ­odo
+        Sem dados no período
       </p>
     </div>
   );

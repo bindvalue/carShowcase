@@ -43,25 +43,25 @@ export function VehicleSpecs({ veiculo }: VehicleSpecsProps) {
       value:
         veiculo.km != null
           ? veiculo.km.toLocaleString("pt-BR") + " km"
-          : "NÃ£o informada",
+          : "Não informada",
       muted: veiculo.km == null,
     },
     {
       icon: Settings2,
-      label: "CÃ¢mbio",
-      value: veiculo.cambio ? capitalize(veiculo.cambio) : "â€”",
+      label: "Câmbio",
+      value: veiculo.cambio ? capitalize(veiculo.cambio) : "—",
       muted: !veiculo.cambio,
     },
     {
       icon: Fuel,
-      label: "CombustÃ­vel",
-      value: veiculo.combustivel ? capitalize(veiculo.combustivel) : "â€”",
+      label: "Combustível",
+      value: veiculo.combustivel ? capitalize(veiculo.combustivel) : "—",
       muted: !veiculo.combustivel,
     },
     {
       icon: Palette,
       label: "Cor",
-      value: veiculo.cor || "â€”",
+      value: veiculo.cor || "—",
       muted: !veiculo.cor,
       color: corHex ?? undefined,
     },
@@ -123,7 +123,7 @@ export function VehicleSpecs({ veiculo }: VehicleSpecsProps) {
                 {spec.value}
               </p>
             </div>
-          </div>f
+          </div>
         </div>
       ))}
     </div>

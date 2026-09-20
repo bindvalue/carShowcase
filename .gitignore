@@ -101,3 +101,10 @@ supabase/
 .wrangler/
 .dev.vars
 cloudflare-env.d.ts
+# ═══════════════════════════════════════════════════════
+# BACKUPS
+# ═══════════════════════════════════════════════════════
+src_backup_*
+src_antes_*
+src_atual_*
+*_backup_*

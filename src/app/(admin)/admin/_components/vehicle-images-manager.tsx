@@ -15,15 +15,15 @@ import { useUploadMultiplasImagens } from "@/hooks/use-update-veiculo";
 import { toast } from "sonner";
 
 interface VehicleImagesManagerProps {
-  /** ID do veÃ­culo â€” null em modo criaÃ§Ã£o */
+  /** ID do veículo "” null em modo criação */
   veiculoId: string | null;
-  /** URLs das imagens jÃ¡ salvas no banco */
+  /** URLs das imagens já salvas no banco */
   imagens: string[];
   /** URL da capa atual (pode ser uma das imagens ou uma URL separada) */
   capaAtual: string | null;
   /** Callback quando muda imagens + capa */
   onChange: (imagens: string[], novaCapa: string | null) => void;
-  /** Arquivos aguardando upload (modo criaÃ§Ã£o) */
+  /** Arquivos aguardando upload (modo criação) */
   pendingFiles?: File[];
   onPendingFilesChange?: (files: File[]) => void;
 }
@@ -45,17 +45,17 @@ export function VehicleImagesManager({
   const handleUpload = async (files: FileList) => {
     if (files.length === 0) return;
 
-    // â”€â”€â”€ MODO CRIAÃ‡ÃƒO: guarda em memÃ³ria â”€â”€â”€
+    // â”€â”€â”€ MODO CRIAÇÃƒO: guarda em memória â”€â”€â”€
     if (isCreating) {
       const novos = Array.from(files);
       const todasPending = [...pendingFiles, ...novos];
       onPendingFilesChange?.(todasPending);
 
-      // Se ainda nÃ£o tem capa e essa Ã© a primeira leva, define a primeira como capa
+      // Se ainda não tem capa e essa é a primeira leva, define a primeira como capa
       if (!capaAtual && todasPending.length > 0) {
-        // A capa serÃ¡ a primeira URL apÃ³s o upload.
-        // Como ainda estamos em memÃ³ria, salvamos a "intenÃ§Ã£o" no componente pai
-        // (ele vai resolver isso apÃ³s upload)
+        // A capa será a primeira URL após o upload.
+        // Como ainda estamos em memória, salvamos a "intenção" no componente pai
+        // (ele vai resolver isso após upload)
       }
 
       toast.success(
@@ -64,7 +64,7 @@ export function VehicleImagesManager({
       return;
     }
 
-    // â”€â”€â”€ MODO EDIÃ‡ÃƒO: faz upload imediato â”€â”€â”€
+    // â”€â”€â”€ MODO EDIÇÃƒO: faz upload imediato â”€â”€â”€
     setUploading(true);
     try {
       const novasUrls = await uploadMutation.mutateAsync({
@@ -84,7 +84,7 @@ export function VehicleImagesManager({
     }
   };
 
-  // â•â•â•â•â•â•â•â•â•â•â• AÃ‡Ã•ES â•â•â•â•â•â•â•â•â•â•â•
+  // â•â•â•â•â•â•â•â•â•â•â• AÇÃ•ES â•â•â•â•â•â•â•â•â•â•â•
   const handleRemove = (url: string) => {
     const novasImagens = imagens.filter((img) => img !== url);
     const novaCapa = capaAtual === url ? (novasImagens[0] ?? null) : capaAtual;
@@ -101,7 +101,7 @@ export function VehicleImagesManager({
     toast.success("Capa definida!");
   };
 
-  // â”€â”€â”€ Definir uma "capa pendente" (modo criaÃ§Ã£o) â”€â”€â”€
+  // â”€â”€â”€ Definir uma "capa pendente" (modo criação) â”€â”€â”€
   const [capaPendenteIndex, setCapaPendenteIndex] = useState(0);
 
   const totalImagens = imagens.length + pendingFiles.length;
@@ -132,7 +132,7 @@ export function VehicleImagesManager({
                 : "Clique para enviar mais fotos"}
             </p>
             <p className="text-xs text-muted-foreground">
-              VocÃª pode escolher vÃ¡rias de uma vez (JPG, PNG, WebP)
+              Você pode escolher várias de uma vez (JPG, PNG, WebP)
             </p>
           </>
         )}
@@ -158,14 +158,14 @@ export function VehicleImagesManager({
           </p>
           <p className="mt-1 text-xs text-muted-foreground">
             {isCreating
-              ? "Selecione fotos â€” depois defina qual serÃ¡ a capa."
-              : "Envie fotos para comeÃ§ar."}
+              ? "Selecione fotos — depois defina qual será a capa."
+              : "Envie fotos para começar."}
           </p>
         </div>
       ) : (
         <>
           <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
-            {/* â•â•â• IMAGENS JÃ SALVAS (modo ediÃ§Ã£o) â•â•â• */}
+            {/* â•â•â• IMAGENS JÃ SALVAS (modo edição) â•â•â• */}
             {imagens.map((url, index) => {
               const isCapa = url === capaAtual;
               return (
@@ -194,7 +194,7 @@ export function VehicleImagesManager({
                     </div>
                   )}
 
-                  {/* Overlay com aÃ§Ãµes */}
+                  {/* Overlay com ações */}
                   <div
                     className={cn(
                       "absolute inset-0 flex items-center justify-center gap-2",
@@ -226,7 +226,7 @@ export function VehicleImagesManager({
                     </Button>
                   </div>
 
-                  {/* NÃºmero */}
+                  {/* Número */}
                   <div className="absolute bottom-2 right-2 rounded-full bg-black/60 backdrop-blur-sm text-white px-2 py-0.5 text-[10px] font-medium">
                     {index + 1}
                   </div>
@@ -234,7 +234,7 @@ export function VehicleImagesManager({
               );
             })}
 
-            {/* â•â•â• ARQUIVOS PENDENTES (modo criaÃ§Ã£o) â•â•â• */}
+            {/* â•â•â• ARQUIVOS PENDENTES (modo criação) â•â•â• */}
             {pendingFiles.map((file, index) => {
               const previewUrl = URL.createObjectURL(file);
               const isCapaPendente = index === capaPendenteIndex;
@@ -264,7 +264,7 @@ export function VehicleImagesManager({
                     </div>
                   )}
 
-                  {/* Overlay com aÃ§Ãµes */}
+                  {/* Overlay com ações */}
                   <div className="absolute inset-0 flex items-center justify-center gap-2 bg-black/60 backdrop-blur-sm opacity-0 transition-opacity group-hover:opacity-100">
                     {!isCapaPendente && (
                       <Button
@@ -290,7 +290,7 @@ export function VehicleImagesManager({
                     </Button>
                   </div>
 
-                  {/* NÃºmero */}
+                  {/* Número */}
                   <div className="absolute bottom-2 right-2 rounded-full bg-black/60 backdrop-blur-sm text-white px-2 py-0.5 text-[10px] font-medium">
                     {imagens.length + index + 1}
                   </div>
@@ -302,8 +302,8 @@ export function VehicleImagesManager({
           {/* â•â•â•â•â•â•â•â•â•â•â• DICA â•â•â•â•â•â•â•â•â•â•â• */}
           <p className="text-xs text-muted-foreground text-center">
             ðŸ’¡ Passe o mouse sobre uma foto e clique em{" "}
-            <strong>Definir capa</strong> para destacÃ¡-la.
-            {isCreating && " As fotos serÃ£o enviadas ao cadastrar o veÃ­culo."}
+            <strong>Definir capa</strong> para destacá-la.
+            {isCreating && " As fotos serão enviadas ao cadastrar o veículo."}
           </p>
         </>
       )}

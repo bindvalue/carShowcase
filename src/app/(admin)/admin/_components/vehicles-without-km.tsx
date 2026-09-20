@@ -19,12 +19,12 @@ export function VehiclesWithoutKm() {
         <div className="flex items-center gap-2">
           <AlertCircle className="h-4 w-4 text-orange-600" />
           <CardTitle className="text-base text-orange-900 dark:text-orange-100">
-            VeÃ­culos sem KM
+            Veículos sem KM
           </CardTitle>
         </div>
         {total > 0 && (
           <Badge variant="outline" className="text-xs border-orange-300">
-            Requer atenÃ§Ã£o
+            Requer atenção
           </Badge>
         )}
       </CardHeader>
@@ -38,10 +38,10 @@ export function VehiclesWithoutKm() {
         ) : total === 0 ? (
           <div className="flex flex-col items-center justify-center py-6 text-center">
             <p className="text-sm font-medium text-green-600 dark:text-green-400">
-              ðŸŽ‰ Nenhum veÃ­culo pendente!
+              ðŸŽ‰ Nenhum veículo pendente!
             </p>
             <p className="text-xs text-muted-foreground mt-1">
-              Todos os veÃ­culos tÃªm a KM informada.
+              Todos os veículos têm a KM informada.
             </p>
           </div>
         ) : (
@@ -57,7 +57,7 @@ export function VehiclesWithoutKm() {
                     <span className="font-medium">
                       {v.marca} {v.modelo}
                     </span>
-                    <span className="text-muted-foreground"> Â· {v.ano}</span>
+                    <span className="text-muted-foreground"> · {v.ano}</span>
                   </span>
                   <ArrowRight className="h-3 w-3 text-muted-foreground shrink-0" />
                 </Link>
@@ -72,7 +72,7 @@ export function VehiclesWithoutKm() {
               className="w-full mt-3 text-orange-600 hover:text-orange-700 hover:bg-orange-100 dark:hover:bg-orange-950/40"
             >
               <Link href="/admin/veiculos">
-                Ver todos os veÃ­culos
+                Ver todos os veículos
                 <ArrowRight className="ml-1 h-3 w-3" />
               </Link>
             </Button>

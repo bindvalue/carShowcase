@@ -61,10 +61,6 @@ export function Header() {
 
         {/* Ações */}
         <nav className="flex items-center gap-2 ml-auto">
-          <Button variant="ghost" asChild className="hidden md:inline-flex">
-            <Link href="/sobre">Sobre</Link>
-          </Button>
-
           <UserMenu />
 
           <Button variant="ghost" size="icon" className="md:hidden">

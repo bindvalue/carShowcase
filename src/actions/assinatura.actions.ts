@@ -17,7 +17,7 @@ const schema = z
     billingType: z.enum(["BOLETO", "PIX", "CREDIT_CARD"]),
     dueDay: z.coerce.number().int().min(1).max(15),
 
-    // CartÃ£o (obrigatÃ³rio se billingType = CREDIT_CARD)
+    // Cartão (obrigatório se billingType = CREDIT_CARD)
     cardNumber: z.string().optional().or(z.literal("")),
     cardHolder: z.string().optional().or(z.literal("")),
     cardExpiryMonth: z.string().optional().or(z.literal("")),
@@ -31,7 +31,7 @@ const schema = z
       ctx.addIssue({
         code: "custom",
         path: ["cpfCnpj"],
-        message: "CPF/CNPJ invÃ¡lido",
+        message: "CPF/CNPJ inválido",
       });
     }
     if (data.billingType === "CREDIT_CARD") {
@@ -39,42 +39,42 @@ const schema = z
         ctx.addIssue({
           code: "custom",
           path: ["cardNumber"],
-          message: "NÃºmero do cartÃ£o invÃ¡lido",
+          message: "Número do cartão inválido",
         });
       }
       if (!data.cardHolder || data.cardHolder.length < 3) {
         ctx.addIssue({
           code: "custom",
           path: ["cardHolder"],
-          message: "Nome do titular Ã© obrigatÃ³rio",
+          message: "Nome do titular é obrigatório",
         });
       }
       if (!data.cardExpiryMonth || !data.cardExpiryYear) {
         ctx.addIssue({
           code: "custom",
           path: ["cardExpiryMonth"],
-          message: "Validade do cartÃ£o Ã© obrigatÃ³ria",
+          message: "Validade do cartão é obrigatória",
         });
       }
       if (!data.cardCcv || data.cardCcv.length < 3) {
         ctx.addIssue({
           code: "custom",
           path: ["cardCcv"],
-          message: "CVV invÃ¡lido",
+          message: "CVV inválido",
         });
       }
       if (!data.holderPostalCode) {
         ctx.addIssue({
           code: "custom",
           path: ["holderPostalCode"],
-          message: "CEP Ã© obrigatÃ³rio para cartÃ£o",
+          message: "CEP é obrigatório para cartão",
         });
       }
       if (!data.holderAddressNumber) {
         ctx.addIssue({
           code: "custom",
           path: ["holderAddressNumber"],
-          message: "NÃºmero do endereÃ§o Ã© obrigatÃ³rio",
+          message: "Número do endereço é obrigatório",
         });
       }
     }
@@ -88,17 +88,17 @@ export async function criarAssinaturaAction(
   formData: FormData
 ): Promise<CriarAssinaturaActionResult> {
   try {
-    // â”€â”€â”€ 1. AutenticaÃ§Ã£o â”€â”€â”€
+    // â”€â”€â”€ 1. Autenticação â”€â”€â”€
     const supabase = await createClient();
     const {
       data: { user },
     } = await supabase.auth.getUser();
 
     if (!user || !user.email) {
-      return { success: false, error: "NÃ£o autenticado" };
+      return { success: false, error: "Não autenticado" };
     }
 
-    // â”€â”€â”€ 2. ValidaÃ§Ã£o â”€â”€â”€
+    // â”€â”€â”€ 2. Validação â”€â”€â”€
     const raw = {
       nome: String(formData.get("nome") ?? ""),
       cpfCnpj: String(formData.get("cpfCnpj") ?? ""),
@@ -131,8 +131,8 @@ export async function criarAssinaturaAction(
     const data = parsed.data;
 
     // â”€â”€â”€ 3. Calcula nextDueDate â”€â”€â”€
-    // Se today for <= dueDay deste mÃªs â†’ nextDueDate = esse mÃªs/dueDay
-    // SenÃ£o â†’ prÃ³ximo mÃªs/dueDay
+    // Se today for <= dueDay deste mês â†’ nextDueDate = esse mês/dueDay
+    // Senão â†’ próximo mês/dueDay
     const today = new Date();
     today.setHours(0, 0, 0, 0);
     let year = today.getFullYear();
@@ -201,7 +201,7 @@ export async function criarAssinaturaAction(
 }
 
 // â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
-// CANCELAR (mantÃ©m o que jÃ¡ existia)
+// CANCELAR (mantém o que já existia)
 // â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
 
 export async function cancelarAssinatura(): Promise<{
@@ -214,7 +214,7 @@ export async function cancelarAssinatura(): Promise<{
       data: { user },
     } = await supabase.auth.getUser();
 
-    if (!user) return { success: false, error: "NÃ£o autenticado" };
+    if (!user) return { success: false, error: "Não autenticado" };
 
     const { cancelarAssinatura: cancelarService } = await import(
       "@/services/asaas.service"
