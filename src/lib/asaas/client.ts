@@ -6,7 +6,7 @@ import {
 } from "@/lib/env";
 
 // ═══════════════════════════════════════════════════════
-// CONFIG (lazy — lê env vars quando chamado)
+// CONFIG
 // ═══════════════════════════════════════════════════════
 
 const REQUEST_TIMEOUT_MS = 15_000;
@@ -22,7 +22,7 @@ function getAsaasConfig(): AsaasConfig {
   return {
     url: getAsaasApiUrl(),
     key: getAsaasApiKey(),
-    isSandbox: isAsaasSandbox(),
+    isSandbox: isAsaasSandboxEnv(),  // ⚠️ USA A FUNÇÃO DO ENV
   };
 }
 

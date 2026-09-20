@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
@@ -14,6 +14,7 @@ import {
 } from "lucide-react";
 import { UserMenu } from "@/components/layout/user-menu";
 import { cn } from "@/lib/utils";
+import { setSidebarCollapsed } from "@/actions/sidebar.actions";
 
 // ═══════════════════════════════════════════════════════
 // NAV ITEMS
@@ -32,22 +33,23 @@ const navItems = [
 
 interface AdminSidebarProps {
   userEmail: string;
+  defaultCollapsed: boolean;
 }
 
-export function AdminSidebar({ userEmail }: AdminSidebarProps) {
+export function AdminSidebar({
+  userEmail,
+  defaultCollapsed,
+}: AdminSidebarProps) {
   const pathname = usePathname();
-  const [collapsed, setCollapsed] = useState(false);
 
-  // Carrega estado do localStorage (só no cliente)
-  useEffect(() => {
-    const saved = localStorage.getItem("admin-sidebar-collapsed");
-    if (saved === "true") setCollapsed(true);
-  }, []);
+  // ⚠️ Estado inicial VEM DO SERVIDOR (cookie) — nunca muda no remount
+  const [collapsed, setCollapsed] = useState(defaultCollapsed);
 
   const toggle = () => {
     setCollapsed((prev) => {
       const next = !prev;
-      localStorage.setItem("admin-sidebar-collapsed", String(next));
+      // Persiste no cookie via Server Action
+      void setSidebarCollapsed(next);
       return next;
     });
   };
@@ -129,7 +131,7 @@ export function AdminSidebar({ userEmail }: AdminSidebarProps) {
       </nav>
 
       {/* ═══════════ FOOTER / USER ═══════════ */}
-      <div className="p-3">
+      <div className="border-t p-3">
         {collapsed ? (
           <div className="flex justify-center">
             <UserMenu />

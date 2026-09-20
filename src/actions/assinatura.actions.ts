@@ -5,9 +5,10 @@ import { revalidatePath } from "next/cache";
 import { createClient } from "@/lib/supabase/server";
 import { criarAssinatura } from "@/services/asaas.service";
 import { validarCpfCnpj, limparDocumento } from "@/lib/validations/cpf-cnpj";
-// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+
+// ═══════════════════════════════════════════════════════
 // SCHEMA
-// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+// ═══════════════════════════════════════════════════════
 
 const schema = z
   .object({
@@ -84,11 +85,15 @@ export type CriarAssinaturaActionResult =
   | { success: true; subscriptionId: string; nextDueDate: string }
   | { success: false; error: string; fieldErrors?: Record<string, string[]> };
 
+// ═══════════════════════════════════════════════════════
+// CRIAR ASSINATURA
+// ═══════════════════════════════════════════════════════
+
 export async function criarAssinaturaAction(
   formData: FormData
 ): Promise<CriarAssinaturaActionResult> {
   try {
-    // â”€â”€â”€ 1. Autenticação â”€â”€â”€
+    // ─── 1. Autenticação ───
     const supabase = await createClient();
     const {
       data: { user },
@@ -98,7 +103,7 @@ export async function criarAssinaturaAction(
       return { success: false, error: "Não autenticado" };
     }
 
-    // â”€â”€â”€ 2. Validação â”€â”€â”€
+    // ─── 2. Validação ───
     const raw = {
       nome: String(formData.get("nome") ?? ""),
       cpfCnpj: String(formData.get("cpfCnpj") ?? ""),
@@ -130,9 +135,7 @@ export async function criarAssinaturaAction(
 
     const data = parsed.data;
 
-    // â”€â”€â”€ 3. Calcula nextDueDate â”€â”€â”€
-    // Se today for <= dueDay deste mês â†’ nextDueDate = esse mês/dueDay
-    // Senão â†’ próximo mês/dueDay
+    // ─── 3. Calcula nextDueDate ───
     const today = new Date();
     today.setHours(0, 0, 0, 0);
     let year = today.getFullYear();
@@ -151,7 +154,7 @@ export async function criarAssinaturaAction(
       dueDate.getMonth() + 1
     ).padStart(2, "0")}-${String(dueDate.getDate()).padStart(2, "0")}`;
 
-    // â”€â”€â”€ 4. Cria assinatura no Asaas â”€â”€â”€
+    // ─── 4. Cria assinatura no Asaas ───
     const result = await criarAssinatura({
       userId: user.id,
       email: user.email,
@@ -200,9 +203,9 @@ export async function criarAssinaturaAction(
   }
 }
 
-// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
-// CANCELAR (mantém o que já existia)
-// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+// ═══════════════════════════════════════════════════════
+// CANCELAR ASSINATURA
+// ═══════════════════════════════════════════════════════
 
 export async function cancelarAssinatura(): Promise<{
   success: boolean;
