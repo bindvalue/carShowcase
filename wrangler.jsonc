@@ -13,7 +13,7 @@
   },
   "vars": {
     "NEXT_PUBLIC_SUPABASE_URL": "https://vqxkwuxavvijtucmcjxe.supabase.co",
-    "NEXT_PUBLIC_SUPABASE_ANON_KEY": "COLA_A_ANON_KEY_AQUI",
+    "NEXT_PUBLIC_SUPABASE_ANON_KEY": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZxeGt3dXhhdnZpanR1Y21janhlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTQ0MTA5MzcsImV4cCI6MjA2OTk4NjkzN30.PPvzBfyQLTyx7rlaiO7_fR-6i0DvcpljmwwwHUSHNSg",
     "NEXT_PUBLIC_ASAAS_API_URL": "https://api.asaas.com/v3"
   }
 }
