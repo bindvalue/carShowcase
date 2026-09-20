@@ -113,21 +113,22 @@ function HomeContent() {
           </span>
         </nav>
 
-        <div className="flex gap-8">
+        <div className="flex flex-col gap-6 lg:flex-row lg:gap-8">
           {/* ⬇️ Sidebar com collapse (desktop) */}
           <FilterCollapse />
 
           {/* Conteúdo */}
           <div className="flex-1 min-w-0">
             <div className="flex flex-col gap-4 mb-6">
-              <div className="flex items-center justify-between gap-3">
-                <div>
-                  <h2 className="text-2xl font-bold tracking-tight">
+              {/* ═══════════ HEADER DO GRID (RESPONSIVO) ═══════════ */}
+              <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+                <div className="min-w-0">
+                  <h2 className="text-xl font-bold tracking-tight sm:text-2xl">
                     {hasFilters
                       ? "Resultados filtrados"
                       : "Destaques da semana"}
                   </h2>
-                  <p className="mt-1 text-sm text-muted-foreground">
+                  <p className="mt-1 text-xs text-muted-foreground sm:text-sm">
                     {loading
                       ? "Carregando..."
                       : hasFilters
@@ -140,16 +141,18 @@ function HomeContent() {
                   </p>
                 </div>
 
-                <div className="flex items-center gap-2">
+                <div className="flex items-center gap-2 w-full sm:w-auto">
                   {/* ⬇️ Bottom sheet (mobile) */}
                   <FilterMobileDrawer
                     activeCount={activeFilterChips.length}
                   />
 
-                  <VehicleSort
-                    value={ordem}
-                    onChange={(v) => setParams({ ordem: v })}
-                  />
+                  <div className="flex-1 min-w-0 sm:flex-initial sm:w-[180px]">
+                    <VehicleSort
+                      value={ordem}
+                      onChange={(v) => setParams({ ordem: v })}
+                    />
+                  </div>
                 </div>
               </div>
 

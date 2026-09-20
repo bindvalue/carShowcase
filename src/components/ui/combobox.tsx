@@ -33,6 +33,14 @@ interface ComboboxProps {
   emptyText?: string;
   disabled?: boolean;
   className?: string;
+  /**
+   * Controla se o popover bloqueia o resto da página.
+   *
+   * - `true` (padrão): ideal para uso normal. Clicar fora fecha.
+   * - `false`: obrigatório quando o Combobox está DENTRO de um
+   *   Dialog/Drawer/Sheet (evita conflito de "travar o body").
+   */
+  modal?: boolean;
 }
 
 export function Combobox({
@@ -44,29 +52,30 @@ export function Combobox({
   emptyText = "Nada encontrado.",
   disabled = false,
   className,
+  modal = true,
 }: ComboboxProps) {
   const [open, setOpen] = useState(false);
 
   const selected = options.find((o) => o.value === value);
 
   return (
-    <Popover open={open} onOpenChange={setOpen} modal={false}>
+    <Popover open={open} onOpenChange={setOpen} modal={modal}>
       <PopoverTrigger asChild>
         <Button
-            type="button"
-            variant="outline"
-            role="combobox"
-            aria-expanded={open}
-            disabled={disabled}
-            className={cn(
-              "!h-10 w-full justify-between font-normal",
-              "rounded-[10px] px-3.5 py-0 text-[15px]",
-              "border-input bg-background",
-              "focus-visible:border-primary focus-visible:ring-2 focus-visible:ring-primary/20",
-              !selected && "text-muted-foreground",
-              className
-            )}
-          >
+          type="button"
+          variant="outline"
+          role="combobox"
+          aria-expanded={open}
+          disabled={disabled}
+          className={cn(
+            "!h-10 w-full justify-between font-normal",
+            "rounded-[10px] px-3.5 py-0 text-[15px]",
+            "border-input bg-background",
+            "focus-visible:border-primary focus-visible:ring-2 focus-visible:ring-primary/20",
+            !selected && "text-muted-foreground",
+            className
+          )}
+        >
           <span className="flex items-center gap-2 truncate">
             {selected?.icon}
             {selected ? selected.label : placeholder}
@@ -80,20 +89,10 @@ export function Combobox({
         align="start"
         side="bottom"
         sideOffset={4}
-        style={{ maxHeight: "320px" }}
-        onWheel={(e) => e.stopPropagation()}
-        onOpenAutoFocus={(e) => e.preventDefault()}
       >
-        <Command
-          className="max-h-[320px]"
-          shouldFilter={true}
-          onWheel={(e) => e.stopPropagation()}
-        >
+        <Command shouldFilter={true}>
           <CommandInput placeholder={searchPlaceholder} />
-          <CommandList
-            className="max-h-[260px] overflow-y-auto overscroll-contain"
-            onWheel={(e) => e.stopPropagation()}
-          >
+          <CommandList className="max-h-[300px] overflow-y-auto overscroll-contain">
             <CommandEmpty>{emptyText}</CommandEmpty>
             <CommandGroup>
               {options.map((option) => (

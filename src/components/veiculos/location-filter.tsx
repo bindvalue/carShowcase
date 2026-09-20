@@ -3,13 +3,7 @@
 import { useState } from "react";
 import { MapPin, X } from "lucide-react";
 import { Input } from "@/components/ui/input";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
+import { Combobox } from "@/components/ui/combobox";
 import { useVehicleFilters } from "@/hooks/use-vehicle-filters";
 import { useEstadosDisponiveis } from "@/hooks/use-veiculos";
 
@@ -35,6 +29,12 @@ export function LocationFilter() {
     setCidadeLocal("");
   };
 
+  // Opções do Combobox
+  const opcoesEstados = [
+    { value: "todos", label: "Todos os estados" },
+    ...estados.map((uf) => ({ value: uf, label: uf })),
+  ];
+
   return (
     <div className="space-y-3">
       {/* Estado */}
@@ -42,22 +42,14 @@ export function LocationFilter() {
         <label className="text-xs text-muted-foreground mb-1.5 block">
           Estado
         </label>
-        <Select
+        <Combobox
+          options={opcoesEstados}
           value={estadoAtual || "todos"}
-          onValueChange={handleEstadoChange}
-        >
-          <SelectTrigger className="h-10">
-            <SelectValue placeholder="Todos os estados" />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="todos">Todos os estados</SelectItem>
-            {estados.map((uf) => (
-              <SelectItem key={uf} value={uf}>
-                {uf}
-              </SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
+          onChange={handleEstadoChange}
+          placeholder="Todos os estados"
+          searchPlaceholder="Buscar estado..."
+          className="!h-10"
+        />
       </div>
 
       {/* Cidade */}

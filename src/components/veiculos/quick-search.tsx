@@ -4,13 +4,7 @@ import { useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 import { Search } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
+import { Combobox } from "@/components/ui/combobox";
 import { useMarcas, useModelos } from "@/hooks/use-catalogos";
 import { CAMBIO_OPTIONS } from "@/lib/constants";
 
@@ -54,6 +48,33 @@ export function QuickSearch() {
     router.push(`/veiculos?${params.toString()}`);
   };
 
+  // Opções dos Combobox
+  const opcoesMarcas = [
+    { value: "all", label: "Todas as marcas" },
+    ...marcas.map((m) => ({ value: m.nome, label: m.nome })),
+  ];
+
+  const opcoesModelos = modelos.map((m) => ({
+    value: m.nome,
+    label: m.nome,
+  }));
+
+  const opcoesAnos = anos.map((a) => ({ value: a, label: a }));
+
+  const opcoesCambio = CAMBIO_OPTIONS.map((c) => ({
+    value: c.value,
+    label: c.label,
+  }));
+
+  const opcoesPreco = [
+    { value: "50000", label: "Até R$ 50.000" },
+    { value: "80000", label: "Até R$ 80.000" },
+    { value: "120000", label: "Até R$ 120.000" },
+    { value: "180000", label: "Até R$ 180.000" },
+    { value: "250000", label: "Até R$ 250.000" },
+    { value: "500000", label: "Até R$ 500.000" },
+  ];
+
   return (
     <div className="rounded-2xl border bg-background p-6 shadow-xl">
       <div className="mb-4 flex items-center gap-2">
@@ -67,25 +88,19 @@ export function QuickSearch() {
           <label className="text-xs font-medium text-muted-foreground">
             Marca
           </label>
-          <Select
-            value={marca}
-            onValueChange={(v) => {
-              setMarca(v === "all" ? "" : v);
-              setModelo("");
-            }}
-          >
-            <SelectTrigger className="h-11 mt-1">
-              <SelectValue placeholder="Todas as marcas" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="all">Todas as marcas</SelectItem>
-              {marcas.map((m) => (
-                <SelectItem key={m.id} value={m.nome}>
-                  {m.nome}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
+          <div className="mt-1">
+            <Combobox
+              options={opcoesMarcas}
+              value={marca || "all"}
+              onChange={(v) => {
+                setMarca(v === "all" ? "" : v);
+                setModelo("");
+              }}
+              placeholder="Todas as marcas"
+              searchPlaceholder="Buscar marca..."
+              className="!h-11"
+            />
+          </div>
         </div>
 
         {/* Modelo */}
@@ -93,28 +108,21 @@ export function QuickSearch() {
           <label className="text-xs font-medium text-muted-foreground">
             Modelo
           </label>
-          <Select
-            value={modelo}
-            onValueChange={setModelo}
-            disabled={!marcaIdSelecionada}
-          >
-            <SelectTrigger className="h-11 mt-1">
-              <SelectValue
-                placeholder={
-                  marcaIdSelecionada
-                    ? "Todos os modelos"
-                    : "Escolha a marca primeiro"
-                }
-              />
-            </SelectTrigger>
-            <SelectContent>
-              {modelos.map((m) => (
-                <SelectItem key={m.id} value={m.nome}>
-                  {m.nome}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
+          <div className="mt-1">
+            <Combobox
+              options={opcoesModelos}
+              value={modelo}
+              onChange={setModelo}
+              placeholder={
+                marcaIdSelecionada
+                  ? "Todos os modelos"
+                  : "Escolha a marca primeiro"
+              }
+              searchPlaceholder="Buscar modelo..."
+              disabled={!marcaIdSelecionada}
+              className="!h-11"
+            />
+          </div>
         </div>
 
         {/* Grid: Ano + Câmbio */}
@@ -123,36 +131,32 @@ export function QuickSearch() {
             <label className="text-xs font-medium text-muted-foreground">
               Ano
             </label>
-            <Select value={ano} onValueChange={setAno}>
-              <SelectTrigger className="h-11 mt-1">
-                <SelectValue placeholder="Todos" />
-              </SelectTrigger>
-              <SelectContent>
-                {anos.map((a) => (
-                  <SelectItem key={a} value={a}>
-                    {a}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
+            <div className="mt-1">
+              <Combobox
+                options={opcoesAnos}
+                value={ano}
+                onChange={setAno}
+                placeholder="Todos"
+                searchPlaceholder="Buscar ano..."
+                className="!h-11"
+              />
+            </div>
           </div>
 
           <div>
             <label className="text-xs font-medium text-muted-foreground">
               Câmbio
             </label>
-            <Select value={cambio} onValueChange={setCambio}>
-              <SelectTrigger className="h-11 mt-1">
-                <SelectValue placeholder="Todos" />
-              </SelectTrigger>
-              <SelectContent>
-                {CAMBIO_OPTIONS.map((c) => (
-                  <SelectItem key={c.value} value={c.value}>
-                    {c.label}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
+            <div className="mt-1">
+              <Combobox
+                options={opcoesCambio}
+                value={cambio}
+                onChange={setCambio}
+                placeholder="Todos"
+                searchPlaceholder="Buscar câmbio..."
+                className="!h-11"
+              />
+            </div>
           </div>
         </div>
 
@@ -161,19 +165,16 @@ export function QuickSearch() {
           <label className="text-xs font-medium text-muted-foreground">
             Preço máximo
           </label>
-          <Select value={precoMax} onValueChange={setPrecoMax}>
-            <SelectTrigger className="h-11 mt-1">
-              <SelectValue placeholder="Sem limite" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="50000">Até R$ 50.000</SelectItem>
-              <SelectItem value="80000">Até R$ 80.000</SelectItem>
-              <SelectItem value="120000">Até R$ 120.000</SelectItem>
-              <SelectItem value="180000">Até R$ 180.000</SelectItem>
-              <SelectItem value="250000">Até R$ 250.000</SelectItem>
-              <SelectItem value="500000">Até R$ 500.000</SelectItem>
-            </SelectContent>
-          </Select>
+          <div className="mt-1">
+            <Combobox
+              options={opcoesPreco}
+              value={precoMax}
+              onChange={setPrecoMax}
+              placeholder="Sem limite"
+              searchPlaceholder="Buscar preço..."
+              className="!h-11"
+            />
+          </div>
         </div>
 
         <Button
