@@ -38,6 +38,7 @@ export async function middleware(request: NextRequest) {
     pathname === "/recuperar-senha";
 
   if (isRecoveryRoute) {
+    forcarCharsetUtf8(supabaseResponse);
     return supabaseResponse;
   }
 
@@ -82,7 +83,35 @@ export async function middleware(request: NextRequest) {
     }
   }
 
+  forcarCharsetUtf8(supabaseResponse);
   return supabaseResponse;
+}
+
+/**
+ * ⚠️ Força o charset UTF-8 nas respostas HTML.
+ * 
+ * Por quê: o Cloudflare Workers (via OpenNext) às vezes serve o HTML
+ * sem o `charset=utf-8` no Content-Type, fazendo o browser interpretar
+ * os acentos como Latin-1 e mostrar "veÃ­culo" em vez de "veículo".
+ * 
+ * Só aplica em HTML — JSON, CSS, JS já vêm com charset correto.
+ */
+function forcarCharsetUtf8(response: NextResponse) {
+  const contentType = response.headers.get("Content-Type");
+  
+  // Se não tem Content-Type, define como HTML UTF-8
+  if (!contentType) {
+    response.headers.set("Content-Type", "text/html; charset=utf-8");
+    return;
+  }
+
+  // Se é HTML e não tem charset, adiciona
+  if (
+    contentType.startsWith("text/html") &&
+    !contentType.toLowerCase().includes("charset")
+  ) {
+    response.headers.set("Content-Type", "text/html; charset=utf-8");
+  }
 }
 
 export const config = {
