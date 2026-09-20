@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { z } from "zod";
+import { z } from "@/lib/zod";
 import { Eye, EyeOff, KeyRound, Loader2, Save } from "lucide-react";
 import { toast } from "sonner";
 
@@ -24,14 +24,14 @@ const schema = z
     currentPassword: z.string().min(1, "Informe a senha atual"),
     newPassword: z
       .string()
-      .min(8, "Mínimo 8 caracteres")
-      .regex(/[A-Z]/, "Deve ter uma letra maiúscula")
-      .regex(/[a-z]/, "Deve ter uma letra minúscula")
-      .regex(/[0-9]/, "Deve ter um número"),
+      .min(8, "MÃ­nimo 8 caracteres")
+      .regex(/[A-Z]/, "Deve ter uma letra maiÃºscula")
+      .regex(/[a-z]/, "Deve ter uma letra minÃºscula")
+      .regex(/[0-9]/, "Deve ter um nÃºmero"),
     confirmPassword: z.string(),
   })
   .refine((d) => d.newPassword === d.confirmPassword, {
-    message: "As senhas não coincidem",
+    message: "As senhas nÃ£o coincidem",
     path: ["confirmPassword"],
   });
 
@@ -61,7 +61,7 @@ export function PasswordForm() {
       } = await supabase.auth.getUser();
 
       if (!user?.email) {
-        toast.error("Sessão expirada. Faça login novamente.");
+        toast.error("SessÃ£o expirada. FaÃ§a login novamente.");
         return;
       }
 
@@ -103,11 +103,11 @@ export function PasswordForm() {
       <CardHeader>
         <CardTitle className="text-base flex items-center gap-2">
           <KeyRound className="h-4 w-4 text-primary" />
-          Segurança
+          SeguranÃ§a
         </CardTitle>
         <CardDescription>
-          Recomendamos uma senha forte com letras maiúsculas, minúsculas e
-          números.
+          Recomendamos uma senha forte com letras maiÃºsculas, minÃºsculas e
+          nÃºmeros.
         </CardDescription>
       </CardHeader>
       <CardContent>
@@ -119,7 +119,7 @@ export function PasswordForm() {
                 id="currentPassword"
                 type={showCurrent ? "text" : "password"}
                 className="h-11 pr-10"
-                placeholder="••••••••"
+                placeholder="â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢"
                 {...register("currentPassword")}
               />
               <button
@@ -149,7 +149,7 @@ export function PasswordForm() {
                   id="newPassword"
                   type={showNew ? "text" : "password"}
                   className="h-11 pr-10"
-                  placeholder="••••••••"
+                  placeholder="â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢"
                   {...register("newPassword")}
                 />
                 <button
@@ -177,7 +177,7 @@ export function PasswordForm() {
                 id="confirmPassword"
                 type="password"
                 className="h-11"
-                placeholder="••••••••"
+                placeholder="â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢"
                 {...register("confirmPassword")}
               />
               {errors.confirmPassword && (

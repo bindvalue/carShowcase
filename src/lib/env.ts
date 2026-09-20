@@ -35,9 +35,3 @@ export const ASAAS_IS_SANDBOX = ASAAS_API_URL.includes("sandbox");
 
 export const ASAAS_WEBHOOK_TOKEN =
   process.env.ASAAS_WEBHOOK_TOKEN ?? undefined;
-
-  import { z } from "zod";
-
-z.config({
-  jitless: true,
-});

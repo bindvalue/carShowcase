@@ -1,13 +1,13 @@
 "use server";
 
-import { z } from "zod";
+import { z } from "@/lib/zod";
 import { revalidatePath } from "next/cache";
 import { createClient } from "@/lib/supabase/server";
 import { criarAssinatura } from "@/services/asaas.service";
 import { validarCpfCnpj, limparDocumento } from "@/lib/validations/cpf-cnpj";
-// ═══════════════════════════════════════════════════════
+// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
 // SCHEMA
-// ═══════════════════════════════════════════════════════
+// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
 
 const schema = z
   .object({
@@ -17,7 +17,7 @@ const schema = z
     billingType: z.enum(["BOLETO", "PIX", "CREDIT_CARD"]),
     dueDay: z.coerce.number().int().min(1).max(15),
 
-    // Cartão (obrigatório se billingType = CREDIT_CARD)
+    // CartÃ£o (obrigatÃ³rio se billingType = CREDIT_CARD)
     cardNumber: z.string().optional().or(z.literal("")),
     cardHolder: z.string().optional().or(z.literal("")),
     cardExpiryMonth: z.string().optional().or(z.literal("")),
@@ -31,7 +31,7 @@ const schema = z
       ctx.addIssue({
         code: "custom",
         path: ["cpfCnpj"],
-        message: "CPF/CNPJ inválido",
+        message: "CPF/CNPJ invÃ¡lido",
       });
     }
     if (data.billingType === "CREDIT_CARD") {
@@ -39,42 +39,42 @@ const schema = z
         ctx.addIssue({
           code: "custom",
           path: ["cardNumber"],
-          message: "Número do cartão inválido",
+          message: "NÃºmero do cartÃ£o invÃ¡lido",
         });
       }
       if (!data.cardHolder || data.cardHolder.length < 3) {
         ctx.addIssue({
           code: "custom",
           path: ["cardHolder"],
-          message: "Nome do titular é obrigatório",
+          message: "Nome do titular Ã© obrigatÃ³rio",
         });
       }
       if (!data.cardExpiryMonth || !data.cardExpiryYear) {
         ctx.addIssue({
           code: "custom",
           path: ["cardExpiryMonth"],
-          message: "Validade do cartão é obrigatória",
+          message: "Validade do cartÃ£o Ã© obrigatÃ³ria",
         });
       }
       if (!data.cardCcv || data.cardCcv.length < 3) {
         ctx.addIssue({
           code: "custom",
           path: ["cardCcv"],
-          message: "CVV inválido",
+          message: "CVV invÃ¡lido",
         });
       }
       if (!data.holderPostalCode) {
         ctx.addIssue({
           code: "custom",
           path: ["holderPostalCode"],
-          message: "CEP é obrigatório para cartão",
+          message: "CEP Ã© obrigatÃ³rio para cartÃ£o",
         });
       }
       if (!data.holderAddressNumber) {
         ctx.addIssue({
           code: "custom",
           path: ["holderAddressNumber"],
-          message: "Número do endereço é obrigatório",
+          message: "NÃºmero do endereÃ§o Ã© obrigatÃ³rio",
         });
       }
     }
@@ -88,17 +88,17 @@ export async function criarAssinaturaAction(
   formData: FormData
 ): Promise<CriarAssinaturaActionResult> {
   try {
-    // ─── 1. Autenticação ───
+    // â”€â”€â”€ 1. AutenticaÃ§Ã£o â”€â”€â”€
     const supabase = await createClient();
     const {
       data: { user },
     } = await supabase.auth.getUser();
 
     if (!user || !user.email) {
-      return { success: false, error: "Não autenticado" };
+      return { success: false, error: "NÃ£o autenticado" };
     }
 
-    // ─── 2. Validação ───
+    // â”€â”€â”€ 2. ValidaÃ§Ã£o â”€â”€â”€
     const raw = {
       nome: String(formData.get("nome") ?? ""),
       cpfCnpj: String(formData.get("cpfCnpj") ?? ""),
@@ -130,9 +130,9 @@ export async function criarAssinaturaAction(
 
     const data = parsed.data;
 
-    // ─── 3. Calcula nextDueDate ───
-    // Se today for <= dueDay deste mês → nextDueDate = esse mês/dueDay
-    // Senão → próximo mês/dueDay
+    // â”€â”€â”€ 3. Calcula nextDueDate â”€â”€â”€
+    // Se today for <= dueDay deste mÃªs â†’ nextDueDate = esse mÃªs/dueDay
+    // SenÃ£o â†’ prÃ³ximo mÃªs/dueDay
     const today = new Date();
     today.setHours(0, 0, 0, 0);
     let year = today.getFullYear();
@@ -151,7 +151,7 @@ export async function criarAssinaturaAction(
       dueDate.getMonth() + 1
     ).padStart(2, "0")}-${String(dueDate.getDate()).padStart(2, "0")}`;
 
-    // ─── 4. Cria assinatura no Asaas ───
+    // â”€â”€â”€ 4. Cria assinatura no Asaas â”€â”€â”€
     const result = await criarAssinatura({
       userId: user.id,
       email: user.email,
@@ -200,9 +200,9 @@ export async function criarAssinaturaAction(
   }
 }
 
-// ═══════════════════════════════════════════════════════
-// CANCELAR (mantém o que já existia)
-// ═══════════════════════════════════════════════════════
+// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+// CANCELAR (mantÃ©m o que jÃ¡ existia)
+// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
 
 export async function cancelarAssinatura(): Promise<{
   success: boolean;
@@ -214,7 +214,7 @@ export async function cancelarAssinatura(): Promise<{
       data: { user },
     } = await supabase.auth.getUser();
 
-    if (!user) return { success: false, error: "Não autenticado" };
+    if (!user) return { success: false, error: "NÃ£o autenticado" };
 
     const { cancelarAssinatura: cancelarService } = await import(
       "@/services/asaas.service"

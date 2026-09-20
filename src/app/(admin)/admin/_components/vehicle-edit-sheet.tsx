@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { ColorCombobox } from "@/components/ui/color-combobox";
-import { z } from "zod";
+import { z } from "@/lib/zod";
 import {
   Loader2,
   Save,
@@ -60,17 +60,17 @@ import { VehicleOpcionaisManager } from "./vehicle-opcionais-manager";
 import type { Veiculo } from "@/types/veiculo";
 
 // ==========================================
-// SCHEMA DE VALIDAÇÃO
+// SCHEMA DE VALIDAÃ‡ÃƒO
 // ==========================================
 
 const veiculoSchema = z.object({
-  marca: z.string().min(1, "Marca é obrigatória"),
-  modelo: z.string().min(1, "Modelo é obrigatório"),
+  marca: z.string().min(1, "Marca Ã© obrigatÃ³ria"),
+  modelo: z.string().min(1, "Modelo Ã© obrigatÃ³rio"),
   ano: z.coerce
     .number()
-    .min(1900, "Ano inválido")
-    .max(new Date().getFullYear() + 1, "Ano inválido"),
-  preco: z.coerce.number().min(0, "Preço inválido"),
+    .min(1900, "Ano invÃ¡lido")
+    .max(new Date().getFullYear() + 1, "Ano invÃ¡lido"),
+  preco: z.coerce.number().min(0, "PreÃ§o invÃ¡lido"),
   km: z.coerce.number().min(0).nullable().optional(),
   tipo: z.enum(["carro", "moto"]),
   cor: z.string().optional().nullable(),
@@ -181,12 +181,12 @@ export function VehicleEditModal({
 
   const tipoAtual = watch("tipo");
 
-  // ─── Preenche o form ───
+  // â”€â”€â”€ Preenche o form â”€â”€â”€
   useEffect(() => {
     if (!open) return;
 
     if (veiculo) {
-      // MODO EDIÇÃO
+      // MODO EDIÃ‡ÃƒO
       reset({
         marca: veiculo.marca,
         modelo: veiculo.modelo,
@@ -216,7 +216,7 @@ export function VehicleEditModal({
       const marca = marcas.find((m) => m.nome === veiculo.marca);
       setMarcaIdSelecionada(marca?.id ?? "");
     } else {
-      // MODO CRIAÇÃO — valores padrão
+      // MODO CRIAÃ‡ÃƒO â€” valores padrÃ£o
       reset({
         marca: "",
         modelo: "",
@@ -246,12 +246,12 @@ export function VehicleEditModal({
     }
   }, [veiculo, open, reset, marcas]);
 
-  // ─── SUBMIT ───
+  // â”€â”€â”€ SUBMIT â”€â”€â”€
   const onSubmit = async (data: VeiculoFormInput) => {
-  // ⚡ Converte o input para output (o Zod já validou, então é seguro)
+  // âš¡ Converte o input para output (o Zod jÃ¡ validou, entÃ£o Ã© seguro)
   const parsed = veiculoSchema.parse(data) as VeiculoFormData;
 
-  // ═══════════ CRIAÇÃO ═══════════
+  // â•â•â•â•â•â•â•â•â•â•â• CRIAÃ‡ÃƒO â•â•â•â•â•â•â•â•â•â•â•
   if (isCreating) {
     try {
       const novoVeiculo = await createMutation.mutateAsync({
@@ -309,7 +309,7 @@ export function VehicleEditModal({
     return;
   }
 
-  // ═══════════ EDIÇÃO ═══════════
+  // â•â•â•â•â•â•â•â•â•â•â• EDIÃ‡ÃƒO â•â•â•â•â•â•â•â•â•â•â•
   if (!veiculo) return;
 
   await updateMutation.mutateAsync({
@@ -358,12 +358,12 @@ export function VehicleEditModal({
         <DialogHeader className="px-8 py-6 border-b shrink-0">
           <DialogTitle className="text-xl font-semibold flex items-center gap-2">
             <Car className="h-5 w-5 text-primary" />
-            {isCreating ? "Novo veículo" : "Editar veículo"}
+            {isCreating ? "Novo veÃ­culo" : "Editar veÃ­culo"}
           </DialogTitle>
           <DialogDescription className="text-sm">
             {isCreating
-              ? "Preencha os dados. As fotos serão enviadas ao cadastrar."
-              : `${veiculo?.marca} ${veiculo?.modelo} · ${veiculo?.ano}`}
+              ? "Preencha os dados. As fotos serÃ£o enviadas ao cadastrar."
+              : `${veiculo?.marca} ${veiculo?.modelo} Â· ${veiculo?.ano}`}
           </DialogDescription>
         </DialogHeader>
 
@@ -374,13 +374,13 @@ export function VehicleEditModal({
         >
           <div className="flex-1 overflow-y-auto min-h-0">
             <div className="px-8 py-8 space-y-10">
-              {/* ═══════════ FOTOS DO VEÍCULO ═══════════ */}
+              {/* â•â•â•â•â•â•â•â•â•â•â• FOTOS DO VEÃCULO â•â•â•â•â•â•â•â•â•â•â• */}
               <section>
-                <SectionTitle>Fotos do veículo</SectionTitle>
+                <SectionTitle>Fotos do veÃ­culo</SectionTitle>
                 <p className="mt-2 text-xs text-muted-foreground">
                   {isCreating
-                    ? "Selecione as fotos e defina qual será a capa. Elas serão enviadas ao cadastrar."
-                    : "Adicione, remova ou defina a capa entre as fotos do veículo."}
+                    ? "Selecione as fotos e defina qual serÃ¡ a capa. Elas serÃ£o enviadas ao cadastrar."
+                    : "Adicione, remova ou defina a capa entre as fotos do veÃ­culo."}
                 </p>
                 <div className="mt-4">
                   <VehicleImagesManager
@@ -405,11 +405,11 @@ export function VehicleEditModal({
 
               <Separator />
 
-              {/* ═══════════ TIPO E STATUS ═══════════ */}
+              {/* â•â•â•â•â•â•â•â•â•â•â• TIPO E STATUS â•â•â•â•â•â•â•â•â•â•â• */}
               <section>
                 <SectionTitle>Tipo e status</SectionTitle>
                 <div className="mt-4 grid grid-cols-1 md:grid-cols-2 gap-6">
-                  <FormField label="Tipo de veículo" required>
+                  <FormField label="Tipo de veÃ­culo" required>
                     <Controller
                       name="tipo"
                       control={control}
@@ -440,7 +440,7 @@ export function VehicleEditModal({
                     />
                   </FormField>
 
-                  <FormField label="Status do anúncio">
+                  <FormField label="Status do anÃºncio">
                     <Controller
                       name="ativo"
                       control={control}
@@ -462,9 +462,9 @@ export function VehicleEditModal({
 
               <Separator />
 
-              {/* ═══════════ DADOS BÁSICOS ═══════════ */}
+              {/* â•â•â•â•â•â•â•â•â•â•â• DADOS BÃSICOS â•â•â•â•â•â•â•â•â•â•â• */}
               <section>
-                <SectionTitle>Dados básicos</SectionTitle>
+                <SectionTitle>Dados bÃ¡sicos</SectionTitle>
                 <div className="mt-4 grid grid-cols-1 md:grid-cols-2 gap-6">
                   <FormField label="Marca" required error={errors.marca?.message}>
                     <Controller
@@ -550,7 +550,7 @@ export function VehicleEditModal({
                     />
                   </FormField>
 
-                  <FormField label="Motor / Versão" error={errors.motor?.message}>
+                  <FormField label="Motor / VersÃ£o" error={errors.motor?.message}>
                     <Controller
                       name="motor"
                       control={control}
@@ -599,7 +599,7 @@ export function VehicleEditModal({
                   </FormField>
 
                   <FormField
-                    label="Preço (R$)"
+                    label="PreÃ§o (R$)"
                     required
                     error={errors.preco?.message}
                   >
@@ -643,7 +643,7 @@ export function VehicleEditModal({
                       {...register("placa")}
                     />
                     <p className="mt-2 text-xs text-muted-foreground">
-                      Só os 3 últimos dígitos serão exibidos na vitrine.
+                      SÃ³ os 3 Ãºltimos dÃ­gitos serÃ£o exibidos na vitrine.
                     </p>
                   </FormField>
                 </div>
@@ -651,11 +651,11 @@ export function VehicleEditModal({
 
               <Separator />
 
-              {/* ═══════════ ESPECIFICAÇÕES ═══════════ */}
+              {/* â•â•â•â•â•â•â•â•â•â•â• ESPECIFICAÃ‡Ã•ES â•â•â•â•â•â•â•â•â•â•â• */}
               <section>
-                <SectionTitle>Especificações</SectionTitle>
+                <SectionTitle>EspecificaÃ§Ãµes</SectionTitle>
                 <div className="mt-4 grid grid-cols-1 md:grid-cols-2 gap-6">
-                  <FormField label="Câmbio">
+                  <FormField label="CÃ¢mbio">
                     <Controller
                       name="cambio"
                       control={control}
@@ -679,7 +679,7 @@ export function VehicleEditModal({
                     />
                   </FormField>
 
-                  <FormField label="Combustível">
+                  <FormField label="CombustÃ­vel">
                     <Controller
                       name="combustivel"
                       control={control}
@@ -724,17 +724,17 @@ export function VehicleEditModal({
 
               <Separator />
 
-              {/* ═══════════ ITENS DO VEÍCULO ═══════════ */}
+              {/* â•â•â•â•â•â•â•â•â•â•â• ITENS DO VEÃCULO â•â•â•â•â•â•â•â•â•â•â• */}
               <section>
                 <SectionTitle>
                   <span className="flex items-center gap-2">
                     <Sparkles className="h-3.5 w-3.5" />
-                    Itens do veículo
+                    Itens do veÃ­culo
                   </span>
                 </SectionTitle>
                 <p className="mt-2 text-xs text-muted-foreground">
-                  Selecione os equipamentos inclusos. Se não encontrar algum,
-                  você pode criar um novo.
+                  Selecione os equipamentos inclusos. Se nÃ£o encontrar algum,
+                  vocÃª pode criar um novo.
                 </p>
                 <div className="mt-4">
                   <Controller
@@ -752,9 +752,9 @@ export function VehicleEditModal({
 
               <Separator />
 
-              {/* ═══════════ CONTATO E DESCRIÇÃO ═══════════ */}
+              {/* â•â•â•â•â•â•â•â•â•â•â• CONTATO E DESCRIÃ‡ÃƒO â•â•â•â•â•â•â•â•â•â•â• */}
               <section>
-                <SectionTitle>Contato e descrição</SectionTitle>
+                <SectionTitle>Contato e descriÃ§Ã£o</SectionTitle>
                 <div className="mt-4 space-y-6">
                   <FormField label="WhatsApp (opcional)">
                     <Input
@@ -763,14 +763,14 @@ export function VehicleEditModal({
                       {...register("whatsapp_link")}
                     />
                     <p className="mt-2 text-xs text-muted-foreground">
-                      Se vazio, usa o WhatsApp padrão do site.
+                      Se vazio, usa o WhatsApp padrÃ£o do site.
                     </p>
                   </FormField>
 
-                  <FormField label="Descrição">
+                  <FormField label="DescriÃ§Ã£o">
                     <Textarea
                       rows={5}
-                      placeholder="Detalhes do veículo, histórico, opcionais..."
+                      placeholder="Detalhes do veÃ­culo, histÃ³rico, opcionais..."
                       {...register("descricao")}
                     />
                   </FormField>
@@ -782,8 +782,8 @@ export function VehicleEditModal({
           {/* FOOTER */}
           <div className="border-t px-8 py-5 flex items-center justify-between gap-3 shrink-0 bg-muted/30">
             <p className="text-xs text-muted-foreground hidden sm:block">
-              Campos com <span className="text-destructive">*</span> são
-              obrigatórios
+              Campos com <span className="text-destructive">*</span> sÃ£o
+              obrigatÃ³rios
             </p>
 
             <div className="flex items-center gap-2 ml-auto">
@@ -810,7 +810,7 @@ export function VehicleEditModal({
                 ) : (
                   <>
                     <Save className="mr-2 h-4 w-4" />
-                    {isCreating ? "Cadastrar veículo" : "Salvar alterações"}
+                    {isCreating ? "Cadastrar veÃ­culo" : "Salvar alteraÃ§Ãµes"}
                   </>
                 )}
               </Button>

@@ -1,21 +1,15 @@
 "use client";
 
-import { Suspense, useState } from "react";
+import { Suspense } from "react";
 import Link from "next/link";
-import { ChevronRight, SlidersHorizontal } from "lucide-react";
+import { ChevronRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import {
-  Sheet,
-  SheetContent,
-  SheetHeader,
-  SheetTitle,
-  SheetTrigger,
-} from "@/components/ui/sheet";
 import { Skeleton } from "@/components/ui/skeleton";
-import { VehicleFilters } from "@/components/veiculos/vehicle-filters";
 import { VehicleGrid } from "@/components/veiculos/vehicle-grid";
 import { VehicleSort } from "@/components/veiculos/vehicle-sort";
 import { ActiveFilters } from "@/components/veiculos/active-filters";
+import { FilterCollapse } from "@/components/veiculos/filter-collapse";
+import { FilterMobileDrawer } from "@/components/veiculos/filter-mobile-drawer";
 import { useVehicleFilters } from "@/hooks/use-vehicle-filters";
 import { useFilteredVeiculos } from "@/hooks/use-filtered-veiculos";
 import type { VeiculoOrdenacao } from "@/types/veiculo";
@@ -37,14 +31,8 @@ function VehicleCardSkeleton() {
 function VeiculosContent() {
   const { getSingleParam, setParams, toggleArrayParam, clearFilters } =
     useVehicleFilters();
-  const [filtersOpen, setFiltersOpen] = useState(false);
 
-  const {
-    veiculos,
-    loading,
-    error,
-    activeFilterChips,
-  } = useFilteredVeiculos();
+  const { veiculos, loading, error, activeFilterChips } = useFilteredVeiculos();
 
   const ordem = (getSingleParam("ordem") as VeiculoOrdenacao) || "recentes";
 
@@ -60,12 +48,8 @@ function VeiculosContent() {
       </nav>
 
       <div className="flex gap-8">
-        {/* Sidebar de filtros desktop */}
-        <aside className="hidden lg:block w-72 shrink-0">
-          <div className="sticky top-24">
-            <VehicleFilters />
-          </div>
-        </aside>
+        {/* ⬇️ Sidebar com collapse (desktop) */}
+        <FilterCollapse />
 
         {/* Conteúdo principal */}
         <div className="flex-1 min-w-0">
@@ -86,23 +70,10 @@ function VeiculosContent() {
               </div>
 
               <div className="flex items-center gap-2">
-                {/* Botão filtros mobile */}
-                <Sheet open={filtersOpen} onOpenChange={setFiltersOpen}>
-                  <SheetTrigger asChild>
-                    <Button variant="outline" size="sm" className="lg:hidden">
-                      <SlidersHorizontal className="h-4 w-4 mr-2" />
-                      Filtros
-                    </Button>
-                  </SheetTrigger>
-                  <SheetContent side="left" className="w-80 overflow-y-auto">
-                    <SheetHeader>
-                      <SheetTitle>Filtros</SheetTitle>
-                    </SheetHeader>
-                    <div className="mt-4">
-                      <VehicleFilters onClose={() => setFiltersOpen(false)} />
-                    </div>
-                  </SheetContent>
-                </Sheet>
+                {/* ⬇️ Bottom sheet (mobile) */}
+                <FilterMobileDrawer
+                  activeCount={activeFilterChips.length}
+                />
 
                 <VehicleSort
                   value={ordem}
@@ -136,11 +107,17 @@ function VeiculosContent() {
             </div>
           ) : veiculos.length === 0 ? (
             <div className="flex flex-col items-center justify-center py-20 text-center">
-              <p className="text-lg font-semibold">Nenhum veículo encontrado</p>
+              <p className="text-lg font-semibold">
+                Nenhum veículo encontrado
+              </p>
               <p className="mt-2 text-sm text-muted-foreground">
                 Tente ajustar os filtros ou limpar a busca.
               </p>
-              <Button variant="outline" className="mt-4" onClick={clearFilters}>
+              <Button
+                variant="outline"
+                className="mt-4"
+                onClick={clearFilters}
+              >
                 Limpar filtros
               </Button>
             </div>

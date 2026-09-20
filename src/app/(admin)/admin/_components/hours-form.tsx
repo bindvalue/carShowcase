@@ -3,7 +3,7 @@
 import { useEffect } from "react";
 import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { z } from "zod";
+import { z } from "@/lib/zod";
 import { Loader2, Save, Clock } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
@@ -81,10 +81,10 @@ export function HoursForm() {
       <CardHeader>
         <CardTitle className="text-base flex items-center gap-2">
           <Clock className="h-4 w-4 text-primary" />
-          Horário de Funcionamento
+          HorÃ¡rio de Funcionamento
         </CardTitle>
         <CardDescription>
-          Exibido no rodapé do site.
+          Exibido no rodapÃ© do site.
         </CardDescription>
       </CardHeader>
       <CardContent>
@@ -95,7 +95,7 @@ export function HoursForm() {
               <div>
                 <Label className="text-sm font-medium">Segunda a Sexta</Label>
                 <div className="text-xs text-muted-foreground mt-1">
-                  Horário de abertura
+                  HorÃ¡rio de abertura
                 </div>
               </div>
               <div className="flex items-center gap-2">
@@ -104,7 +104,7 @@ export function HoursForm() {
                   className="h-11 w-32"
                   {...register("hours_weekdays_open")}
                 />
-                <span className="text-muted-foreground">às</span>
+                <span className="text-muted-foreground">Ã s</span>
                 <Input
                   type="time"
                   className="h-11 w-32"
@@ -114,12 +114,12 @@ export function HoursForm() {
               <div />
             </div>
 
-            {/* Sábado */}
+            {/* SÃ¡bado */}
             <div className="grid grid-cols-[1fr_auto_1fr] items-end gap-3">
               <div>
-                <Label className="text-sm font-medium">Sábado</Label>
+                <Label className="text-sm font-medium">SÃ¡bado</Label>
                 <div className="text-xs text-muted-foreground mt-1">
-                  Horário de abertura
+                  HorÃ¡rio de abertura
                 </div>
               </div>
               <div className="flex items-center gap-2">
@@ -128,7 +128,7 @@ export function HoursForm() {
                   className="h-11 w-32"
                   {...register("hours_saturday_open")}
                 />
-                <span className="text-muted-foreground">às</span>
+                <span className="text-muted-foreground">Ã s</span>
                 <Input
                   type="time"
                   className="h-11 w-32"
@@ -149,7 +149,7 @@ export function HoursForm() {
                     <p className="text-xs text-muted-foreground mt-1">
                       {field.value
                         ? "Fechado"
-                        : "Aberto (configure o horário no admin)"}
+                        : "Aberto (configure o horÃ¡rio no admin)"}
                     </p>
                   </div>
                   <div className="flex items-center gap-3">
@@ -180,7 +180,7 @@ export function HoursForm() {
               ) : (
                 <>
                   <Save className="mr-2 h-4 w-4" />
-                  Salvar horários
+                  Salvar horÃ¡rios
                 </>
               )}
             </Button>

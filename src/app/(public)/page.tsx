@@ -1,28 +1,21 @@
 "use client";
 
-import { Suspense, useState } from "react";
+import { Suspense } from "react";
 import Link from "next/link";
 import {
   ArrowRight,
   BadgeCheck,
   ChevronRight,
   ShieldCheck,
-  SlidersHorizontal,
   TrendingUp,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import {
-  Sheet,
-  SheetContent,
-  SheetHeader,
-  SheetTitle,
-  SheetTrigger,
-} from "@/components/ui/sheet";
 import { Skeleton } from "@/components/ui/skeleton";
 import { VehicleCard } from "@/components/veiculos/vehicle-card";
-import { VehicleFilters } from "@/components/veiculos/vehicle-filters";
 import { VehicleSort } from "@/components/veiculos/vehicle-sort";
 import { ActiveFilters } from "@/components/veiculos/active-filters";
+import { FilterCollapse } from "@/components/veiculos/filter-collapse";
+import { FilterMobileDrawer } from "@/components/veiculos/filter-mobile-drawer";
 import { useVehicleFilters } from "@/hooks/use-vehicle-filters";
 import { useFilteredVeiculos } from "@/hooks/use-filtered-veiculos";
 import { useTotalVeiculosAtivos } from "@/hooks/use-veiculos";
@@ -45,21 +38,14 @@ function VehicleCardSkeleton() {
 function HomeContent() {
   const { getSingleParam, setParams, toggleArrayParam, clearFilters } =
     useVehicleFilters();
-  const [filtersOpen, setFiltersOpen] = useState(false);
 
-  const {
-    veiculos,
-    loading,
-    error,
-    activeFilterChips,
-    hasFilters,
-  } = useFilteredVeiculos();
+  const { veiculos, loading, error, activeFilterChips, hasFilters } =
+    useFilteredVeiculos();
 
   const { data: totalAtivos = 0 } = useTotalVeiculosAtivos();
 
   const ordem = (getSingleParam("ordem") as VeiculoOrdenacao) || "recentes";
 
-  // Se não há filtros, mostra só 6 destaques
   const veiculosExibidos = hasFilters ? veiculos : veiculos.slice(0, 6);
 
   return (
@@ -75,7 +61,10 @@ function HomeContent() {
           <div className="mx-auto max-w-3xl text-center">
             <div className="inline-flex items-center gap-2 rounded-full border bg-background px-3 py-1 text-xs font-medium mb-6">
               <span className="flex h-2 w-2 rounded-full bg-primary animate-pulse" />
-              {totalAtivos} {totalAtivos === 1 ? "veículo disponível" : "veículos disponíveis"}
+              {totalAtivos}{" "}
+              {totalAtivos === 1
+                ? "veículo disponível"
+                : "veículos disponíveis"}
             </div>
 
             <h1 className="text-3xl font-bold tracking-tight sm:text-4xl md:text-5xl lg:text-6xl">
@@ -93,7 +82,9 @@ function HomeContent() {
                 <div className="flex h-8 w-8 items-center justify-center rounded-full bg-primary/10">
                   <ShieldCheck className="h-4 w-4 text-primary" />
                 </div>
-                <span className="text-sm font-medium">Procedência garantida</span>
+                <span className="text-sm font-medium">
+                  Procedência garantida
+                </span>
               </div>
               <div className="flex items-center gap-2">
                 <div className="flex h-8 w-8 items-center justify-center rounded-full bg-primary/10">
@@ -112,7 +103,7 @@ function HomeContent() {
         </div>
       </section>
 
-      {/* CONTEÚDO COM SIDEBAR DE FILTROS */}
+      {/* CONTEÚDO */}
       <section className="container mx-auto px-4 py-12 md:py-16">
         <nav className="flex items-center gap-1 text-sm text-muted-foreground mb-6">
           <span>Home</span>
@@ -123,12 +114,8 @@ function HomeContent() {
         </nav>
 
         <div className="flex gap-8">
-          {/* Sidebar desktop */}
-          <aside className="hidden lg:block w-72 shrink-0">
-            <div className="sticky top-24">
-              <VehicleFilters />
-            </div>
-          </aside>
+          {/* ⬇️ Sidebar com collapse (desktop) */}
+          <FilterCollapse />
 
           {/* Conteúdo */}
           <div className="flex-1 min-w-0">
@@ -136,7 +123,9 @@ function HomeContent() {
               <div className="flex items-center justify-between gap-3">
                 <div>
                   <h2 className="text-2xl font-bold tracking-tight">
-                    {hasFilters ? "Resultados filtrados" : "Destaques da semana"}
+                    {hasFilters
+                      ? "Resultados filtrados"
+                      : "Destaques da semana"}
                   </h2>
                   <p className="mt-1 text-sm text-muted-foreground">
                     {loading
@@ -152,22 +141,10 @@ function HomeContent() {
                 </div>
 
                 <div className="flex items-center gap-2">
-                  <Sheet open={filtersOpen} onOpenChange={setFiltersOpen}>
-                    <SheetTrigger asChild>
-                      <Button variant="outline" size="sm" className="lg:hidden">
-                        <SlidersHorizontal className="h-4 w-4 mr-2" />
-                        Filtros
-                      </Button>
-                    </SheetTrigger>
-                    <SheetContent side="left" className="w-80 overflow-y-auto">
-                      <SheetHeader>
-                        <SheetTitle>Filtros</SheetTitle>
-                      </SheetHeader>
-                      <div className="mt-4">
-                        <VehicleFilters onClose={() => setFiltersOpen(false)} />
-                      </div>
-                    </SheetContent>
-                  </Sheet>
+                  {/* ⬇️ Bottom sheet (mobile) */}
+                  <FilterMobileDrawer
+                    activeCount={activeFilterChips.length}
+                  />
 
                   <VehicleSort
                     value={ordem}
@@ -201,11 +178,17 @@ function HomeContent() {
               </div>
             ) : veiculosExibidos.length === 0 ? (
               <div className="flex flex-col items-center justify-center py-20 text-center">
-                <p className="text-lg font-semibold">Nenhum veículo encontrado</p>
+                <p className="text-lg font-semibold">
+                  Nenhum veículo encontrado
+                </p>
                 <p className="mt-2 text-sm text-muted-foreground">
                   Tente ajustar os filtros ou limpar a busca.
                 </p>
-                <Button variant="outline" className="mt-4" onClick={clearFilters}>
+                <Button
+                  variant="outline"
+                  className="mt-4"
+                  onClick={clearFilters}
+                >
                   Limpar filtros
                 </Button>
               </div>
@@ -219,7 +202,11 @@ function HomeContent() {
 
                 {!hasFilters && veiculos.length > 6 && (
                   <div className="mt-10 flex flex-col items-center gap-3">
-                    <Button asChild size="lg" className="w-full sm:w-auto px-8">
+                    <Button
+                      asChild
+                      size="lg"
+                      className="w-full sm:w-auto px-8"
+                    >
                       <Link href="/veiculos">
                         Ver catálogo completo
                         <ArrowRight className="ml-2 h-4 w-4" />

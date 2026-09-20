@@ -1,10 +1,10 @@
-import { z } from "zod";
+import { z } from "@/lib/zod";
 
 export const loginSchema = z.object({
   email: z
     .string()
-    .min(1, "Email é obrigatório")
-    .email("Digite um email válido"),
+    .min(1, "Email Ã© obrigatÃ³rio")
+    .email("Digite um email vÃ¡lido"),
   password: z
     .string()
     .min(6, "A senha deve ter pelo menos 6 caracteres"),
@@ -13,8 +13,8 @@ export const loginSchema = z.object({
 export const forgotPasswordSchema = z.object({
   email: z
     .string()
-    .min(1, "Email é obrigatório")
-    .email("Digite um email válido"),
+    .min(1, "Email Ã© obrigatÃ³rio")
+    .email("Digite um email vÃ¡lido"),
 });
 
 export const newPasswordSchema = z
@@ -22,29 +22,29 @@ export const newPasswordSchema = z
     newPassword: z
       .string()
       .min(8, "A senha deve ter pelo menos 8 caracteres")
-      .regex(/[A-Z]/, "Deve conter pelo menos uma letra maiúscula")
-      .regex(/[a-z]/, "Deve conter pelo menos uma letra minúscula")
-      .regex(/[0-9]/, "Deve conter pelo menos um número"),
+      .regex(/[A-Z]/, "Deve conter pelo menos uma letra maiÃºscula")
+      .regex(/[a-z]/, "Deve conter pelo menos uma letra minÃºscula")
+      .regex(/[0-9]/, "Deve conter pelo menos um nÃºmero"),
     confirmPassword: z.string().min(1, "Confirme a nova senha"),
   })
   .refine((data) => data.newPassword === data.confirmPassword, {
-    message: "As senhas não coincidem",
+    message: "As senhas nÃ£o coincidem",
     path: ["confirmPassword"],
   });
 
 export const changePasswordSchema = z
   .object({
-    currentPassword: z.string().min(6, "Senha atual é obrigatória"),
+    currentPassword: z.string().min(6, "Senha atual Ã© obrigatÃ³ria"),
     newPassword: z
       .string()
       .min(8, "A nova senha deve ter pelo menos 8 caracteres")
-      .regex(/[A-Z]/, "Deve conter pelo menos uma letra maiúscula")
-      .regex(/[a-z]/, "Deve conter pelo menos uma letra minúscula")
-      .regex(/[0-9]/, "Deve conter pelo menos um número"),
+      .regex(/[A-Z]/, "Deve conter pelo menos uma letra maiÃºscula")
+      .regex(/[a-z]/, "Deve conter pelo menos uma letra minÃºscula")
+      .regex(/[0-9]/, "Deve conter pelo menos um nÃºmero"),
     confirmPassword: z.string(),
   })
   .refine((data) => data.newPassword === data.confirmPassword, {
-    message: "As senhas não coincidem",
+    message: "As senhas nÃ£o coincidem",
     path: ["confirmPassword"],
   });
 
