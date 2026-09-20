@@ -33,9 +33,9 @@ import { formatBRL } from "@/lib/formatters";
 import { cancelarAssinatura } from "@/actions/assinatura.actions";
 import { PLANO } from "@/lib/plano";
 
-// ═══════════════════════════════════════════════════════
+// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
 // TIPOS
-// ═══════════════════════════════════════════════════════
+// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
 
 interface AssinaturaStatus {
   temAssinatura: boolean;
@@ -66,9 +66,9 @@ interface AssinaturaCardProps {
   pagamentoPendente?: PagamentoPendente | null;
 }
 
-// ═══════════════════════════════════════════════════════
+// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
 // COMPONENTE
-// ═══════════════════════════════════════════════════════
+// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
 
 export function AssinaturaCard({
   status,
@@ -89,7 +89,7 @@ export function AssinaturaCard({
     });
   };
 
-  // ═══════════ VITALÍCIO ═══════════
+  // â•â•â•â•â•â•â•â•â•â•â• VITALÃCIO â•â•â•â•â•â•â•â•â•â•â•
   if (status.isLifetime) {
     return (
       <Card className="border-green-200 dark:border-green-900/60 bg-green-50/30 dark:bg-green-950/10">
@@ -97,21 +97,21 @@ export function AssinaturaCard({
           <div className="flex items-center justify-between">
             <CardTitle className="text-base flex items-center gap-2">
               <CheckCircle2 className="h-5 w-5 text-green-600" />
-              Acesso Vitalício
+              Acesso VitalÃ­cio
             </CardTitle>
             <Badge className="bg-green-600 hover:bg-green-600">
-              Sem expiração
+              Sem expiraÃ§Ã£o
             </Badge>
           </div>
           <CardDescription>
-            Você tem acesso vitalício ao sistema. Nenhuma cobrança será feita.
+            VocÃª tem acesso vitalÃ­cio ao sistema. Nenhuma cobranÃ§a serÃ¡ feita.
           </CardDescription>
         </CardHeader>
       </Card>
     );
   }
 
-  // ═══════════ SEM ASSINATURA ═══════════
+  // â•â•â•â•â•â•â•â•â•â•â• SEM ASSINATURA â•â•â•â•â•â•â•â•â•â•â•
   if (!status.temAssinatura) {
     return (
       <Card className="border-orange-200 dark:border-orange-900/60 bg-orange-50/30 dark:bg-orange-950/10">
@@ -128,15 +128,15 @@ export function AssinaturaCard({
         </CardHeader>
         <CardContent>
           <p className="text-sm text-muted-foreground mb-4">
-            Plano único: <strong>{PLANO.valorFormatado}/mês</strong> com
-            vencimento no dia que você escolher (até dia 15).
+            Plano Ãºnico: <strong>{PLANO.valorFormatado}/mÃªs</strong> com
+            vencimento no dia que vocÃª escolher (atÃ© dia 15).
           </p>
         </CardContent>
       </Card>
     );
   }
 
-  // ═══════════ ASSINATURA ATIVA ═══════════
+  // â•â•â•â•â•â•â•â•â•â•â• ASSINATURA ATIVA â•â•â•â•â•â•â•â•â•â•â•
   const isAtiva = status.subscribed;
   const vencimento = status.subscriptionEnd
     ? new Date(status.subscriptionEnd)
@@ -166,7 +166,7 @@ export function AssinaturaCard({
         </CardHeader>
 
         <CardContent className="space-y-6">
-          {/* ─── Info ─── */}
+          {/* â”€â”€â”€ Info â”€â”€â”€ */}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div className="space-y-1">
               <p className="text-xs text-muted-foreground">Valor mensal</p>
@@ -176,17 +176,17 @@ export function AssinaturaCard({
             </div>
 
             <div className="space-y-1">
-              <p className="text-xs text-muted-foreground">Válido até</p>
+              <p className="text-xs text-muted-foreground">VÃ¡lido atÃ©</p>
               <p className="text-lg font-bold flex items-center gap-2">
                 <Calendar className="h-4 w-4 text-primary" />
-                {vencimento ? vencimento.toLocaleDateString("pt-BR") : "—"}
+                {vencimento ? vencimento.toLocaleDateString("pt-BR") : "â€”"}
               </p>
             </div>
 
             {status.nextDueDate && (
               <div className="space-y-1">
                 <p className="text-xs text-muted-foreground">
-                  Próximo vencimento
+                  PrÃ³ximo vencimento
                 </p>
                 <p className="text-sm font-medium">
                   {new Date(status.nextDueDate).toLocaleDateString("pt-BR")}
@@ -197,17 +197,17 @@ export function AssinaturaCard({
             {status.lastPaymentAt && (
               <div className="space-y-1">
                 <p className="text-xs text-muted-foreground">
-                  Último pagamento
+                  Ãšltimo pagamento
                 </p>
                 <p className="text-sm font-medium">
                   {new Date(status.lastPaymentAt).toLocaleDateString("pt-BR")}{" "}
-                  · {formatBRL(status.lastPaymentValue || 0)}
+                  Â· {formatBRL(status.lastPaymentValue || 0)}
                 </p>
               </div>
             )}
           </div>
 
-          {/* ═══════════ PAGAMENTO PENDENTE ═══════════ */}
+          {/* â•â•â•â•â•â•â•â•â•â•â• PAGAMENTO PENDENTE â•â•â•â•â•â•â•â•â•â•â• */}
           {pagamentoPendente && (
             <div className="rounded-xl border border-border bg-muted/30 p-4 space-y-3">
               <div className="flex items-start gap-3">
@@ -227,7 +227,7 @@ export function AssinaturaCard({
                         pagamentoPendente.dueDate + "T00:00:00"
                       ).toLocaleDateString("pt-BR")}
                     </span>{" "}
-                    · Valor{" "}
+                    Â· Valor{" "}
                     <span className="text-foreground font-medium">
                       {formatBRL(pagamentoPendente.value)}
                     </span>
@@ -253,12 +253,12 @@ export function AssinaturaCard({
               )}
 
               <p className="text-[11px] text-muted-foreground text-center">
-                O acesso é liberado automaticamente após a confirmação.
+                O acesso Ã© liberado automaticamente apÃ³s a confirmaÃ§Ã£o.
               </p>
             </div>
           )}
 
-          {/* ─── Ações ─── */}
+          {/* â”€â”€â”€ AÃ§Ãµes â”€â”€â”€ */}
           <div className="flex flex-col sm:flex-row gap-3 pt-4 border-t">
             <Button
               variant="outline"
@@ -272,7 +272,7 @@ export function AssinaturaCard({
         </CardContent>
       </Card>
 
-      {/* ─── Dialog de cancelamento ─── */}
+      {/* â”€â”€â”€ Dialog de cancelamento â”€â”€â”€ */}
       <Dialog open={openCancel} onOpenChange={setOpenCancel}>
         <DialogContent>
           <DialogHeader>
@@ -283,16 +283,16 @@ export function AssinaturaCard({
             <DialogDescription asChild>
               <div className="space-y-2">
                 <p>
-                  Ao cancelar, você manterá acesso até{" "}
+                  Ao cancelar, vocÃª manterÃ¡ acesso atÃ©{" "}
                   <strong>
                     {vencimento
                       ? vencimento.toLocaleDateString("pt-BR")
-                      : "o fim do período atual"}
+                      : "o fim do perÃ­odo atual"}
                   </strong>
-                  . Depois disso, o sistema será bloqueado.
+                  . Depois disso, o sistema serÃ¡ bloqueado.
                 </p>
                 <p className="text-xs text-muted-foreground">
-                  Você pode reativar a qualquer momento.
+                  VocÃª pode reativar a qualquer momento.
                 </p>
               </div>
             </DialogDescription>

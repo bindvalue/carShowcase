@@ -13,7 +13,7 @@ import { LocationFilter } from "./location-filter";
 import { useVehicleFilters } from "@/hooks/use-vehicle-filters";
 import { CAMBIO_OPTIONS, COMBUSTIVEL_OPTIONS } from "@/lib/constants";
 
-// ═══════════ NOVOS HOOKS (banco de dados) ═══════════
+// â•â•â•â•â•â•â•â•â•â•â• NOVOS HOOKS (banco de dados) â•â•â•â•â•â•â•â•â•â•â•
 import { useMarcas, useModelos, useCores } from "@/hooks/use-catalogos";
 
 interface VehicleFiltersProps {
@@ -24,11 +24,11 @@ export function VehicleFilters({ onClose }: VehicleFiltersProps) {
   const { getParam, toggleArrayParam, setParams, clearFilters } =
     useVehicleFilters();
 
-  // ═══════════ DADOS DO BANCO ═══════════
+  // â•â•â•â•â•â•â•â•â•â•â• DADOS DO BANCO â•â•â•â•â•â•â•â•â•â•â•
   const { data: marcas = [], isLoading: loadingMarcas } = useMarcas();
   const { data: cores = [], isLoading: loadingCores } = useCores();
 
-  // ─── Modelos filtrados pela(s) marca(s) selecionada(s) ───
+  // â”€â”€â”€ Modelos filtrados pela(s) marca(s) selecionada(s) â”€â”€â”€
   const marcasSelecionadas = getParam("marca");
   const marcaIdSelecionada = useMemo(() => {
     if (marcasSelecionadas.length !== 1) return undefined;
@@ -39,13 +39,13 @@ export function VehicleFilters({ onClose }: VehicleFiltersProps) {
   const { data: modelos = [], isLoading: loadingModelos } =
     useModelos(marcaIdSelecionada);
 
-  // ─── Seleções atuais ───
+  // â”€â”€â”€ SeleÃ§Ãµes atuais â”€â”€â”€
   const modelosSelecionados = getParam("modelo");
   const cambioSelecionado = getParam("cambio");
   const combustivelSelecionado = getParam("combustivel");
   const coresSelecionadas = getParam("cor");
 
-  // ─── Ranges ───
+  // â”€â”€â”€ Ranges â”€â”€â”€
   const anoMin = Number(getParam("anoMin")[0]) || 1990;
   const anoMax = Number(getParam("anoMax")[0]) || new Date().getFullYear() + 1;
   const precoMin = Number(getParam("precoMin")[0]) || 0;
@@ -85,12 +85,12 @@ export function VehicleFilters({ onClose }: VehicleFiltersProps) {
         <VehicleTypeToggle />
       </div>
 
-      {/* Localização */}
-      <FilterSection title="Localização">
+      {/* LocalizaÃ§Ã£o */}
+      <FilterSection title="LocalizaÃ§Ã£o">
         <LocationFilter />
       </FilterSection>
 
-      {/* ─── MARCA (do banco) ─── */}
+      {/* â”€â”€â”€ MARCA (do banco) â”€â”€â”€ */}
       <FilterSection title="Marca">
         {loadingMarcas ? (
           <p className="text-xs text-muted-foreground py-2">Carregando...</p>
@@ -118,7 +118,7 @@ export function VehicleFilters({ onClose }: VehicleFiltersProps) {
         )}
       </FilterSection>
 
-      {/* ─── MODELO (do banco, filtrado por marca) ─── */}
+      {/* â”€â”€â”€ MODELO (do banco, filtrado por marca) â”€â”€â”€ */}
       <FilterSection title="Modelo" defaultOpen={false}>
         {!marcaIdSelecionada ? (
           <p className="text-xs text-muted-foreground py-2">
@@ -150,8 +150,8 @@ export function VehicleFilters({ onClose }: VehicleFiltersProps) {
         )}
       </FilterSection>
 
-      {/* Preço */}
-      <FilterSection title="Preço">
+      {/* PreÃ§o */}
+      <FilterSection title="PreÃ§o">
         <PriceRangeFilter
           min={0}
           max={500000}
@@ -183,8 +183,8 @@ export function VehicleFilters({ onClose }: VehicleFiltersProps) {
         />
       </FilterSection>
 
-      {/* Câmbio */}
-      <FilterSection title="Câmbio" defaultOpen={false}>
+      {/* CÃ¢mbio */}
+      <FilterSection title="CÃ¢mbio" defaultOpen={false}>
         <div className="space-y-2">
           {CAMBIO_OPTIONS.map((opt) => (
             <label
@@ -201,8 +201,8 @@ export function VehicleFilters({ onClose }: VehicleFiltersProps) {
         </div>
       </FilterSection>
 
-      {/* Combustível */}
-      <FilterSection title="Combustível" defaultOpen={false}>
+      {/* CombustÃ­vel */}
+      <FilterSection title="CombustÃ­vel" defaultOpen={false}>
         <div className="space-y-2">
           {COMBUSTIVEL_OPTIONS.map((opt) => (
             <label
@@ -221,7 +221,7 @@ export function VehicleFilters({ onClose }: VehicleFiltersProps) {
         </div>
       </FilterSection>
 
-      {/* ─── COR (do banco) ─── */}
+      {/* â”€â”€â”€ COR (do banco) â”€â”€â”€ */}
       <FilterSection title="Cor" defaultOpen={false}>
         {loadingCores ? (
           <p className="text-xs text-muted-foreground py-2">Carregando...</p>

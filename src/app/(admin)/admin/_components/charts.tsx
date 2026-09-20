@@ -19,19 +19,19 @@ import {
   useCadastrosUltimos30Dias,
 } from "@/hooks/use-dashboard";
 
-// ═══════════════════════════════════════════════════════
+// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
 // HELPERS
-// ═══════════════════════════════════════════════════════
+// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
 
-/** Trunca nomes longos de marca: "Mercedes-Benz" → "Mercedes…" */
+/** Trunca nomes longos de marca: "Mercedes-Benz" â†’ "Mercedesâ€¦" */
 function truncarLabel(nome: string, max = 10): string {
   if (!nome) return "";
-  return nome.length > max ? `${nome.slice(0, max)}…` : nome;
+  return nome.length > max ? `${nome.slice(0, max)}â€¦` : nome;
 }
 
-// ═══════════════════════════════════════════════════════
+// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
 // TOOLTIP CUSTOMIZADO (Apple HIG)
-// ═══════════════════════════════════════════════════════
+// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
 
 interface TooltipPayloadItem {
   value?: number | string;
@@ -76,9 +76,9 @@ function ChartTooltip({
   );
 }
 
-// ═══════════════════════════════════════════════════════
-// GRÁFICO 1 — VEÍCULOS POR MARCA
-// ═══════════════════════════════════════════════════════
+// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+// GRÃFICO 1 â€” VEÃCULOS POR MARCA
+// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
 
 export function VeiculosPorMarcaChart() {
   const { data, isLoading } = useVeiculosPorMarca();
@@ -93,10 +93,10 @@ export function VeiculosPorMarcaChart() {
     <Card className="border-border/60">
       <CardHeader className="pb-2">
         <CardTitle className="text-base font-semibold">
-          Veículos por marca
+          VeÃ­culos por marca
         </CardTitle>
         <p className="text-xs text-muted-foreground">
-          Top {data?.length ?? 0} marcas com mais veículos ativos
+          Top {data?.length ?? 0} marcas com mais veÃ­culos ativos
         </p>
       </CardHeader>
 
@@ -109,7 +109,7 @@ export function VeiculosPorMarcaChart() {
               data={data ?? []}
               margin={{ top: 8, right: 8, left: -16, bottom: 0 }}
             >
-              {/* Grid só na horizontal, discreto */}
+              {/* Grid sÃ³ na horizontal, discreto */}
               <CartesianGrid
                 vertical={false}
                 stroke="hsl(var(--border))"
@@ -136,7 +136,7 @@ export function VeiculosPorMarcaChart() {
 
               <Tooltip
                 cursor={{ fill: "hsl(var(--muted))", opacity: 0.4 }}
-                content={<ChartTooltip labelPrefix="" unit="veículos" />}
+                content={<ChartTooltip labelPrefix="" unit="veÃ­culos" />}
               />
 
               <Bar
@@ -154,9 +154,9 @@ export function VeiculosPorMarcaChart() {
   );
 }
 
-// ═══════════════════════════════════════════════════════
-// GRÁFICO 2 — CADASTROS NOS ÚLTIMOS 30 DIAS
-// ═══════════════════════════════════════════════════════
+// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+// GRÃFICO 2 â€” CADASTROS NOS ÃšLTIMOS 30 DIAS
+// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
 
 export function CadastrosUltimos30DiasChart() {
   const { data, isLoading } = useCadastrosUltimos30Dias();
@@ -174,10 +174,10 @@ export function CadastrosUltimos30DiasChart() {
         <div className="flex items-start justify-between gap-3">
           <div>
             <CardTitle className="text-base font-semibold">
-              Cadastros nos últimos 30 dias
+              Cadastros nos Ãºltimos 30 dias
             </CardTitle>
             <p className="text-xs text-muted-foreground">
-              {total} {total === 1 ? "cadastro" : "cadastros"} no período
+              {total} {total === 1 ? "cadastro" : "cadastros"} no perÃ­odo
             </p>
           </div>
         </div>
@@ -208,7 +208,7 @@ export function CadastrosUltimos30DiasChart() {
                 </linearGradient>
               </defs>
 
-              {/* Grid só na horizontal */}
+              {/* Grid sÃ³ na horizontal */}
               <CartesianGrid
                 vertical={false}
                 stroke="hsl(var(--border))"
@@ -264,15 +264,15 @@ export function CadastrosUltimos30DiasChart() {
   );
 }
 
-// ═══════════════════════════════════════════════════════
+// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
 // EMPTY STATE
-// ═══════════════════════════════════════════════════════
+// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
 
 function EmptyChart() {
   return (
     <div className="flex h-[260px] flex-col items-center justify-center text-center">
       <p className="text-sm text-muted-foreground">
-        Sem dados no período
+        Sem dados no perÃ­odo
       </p>
     </div>
   );

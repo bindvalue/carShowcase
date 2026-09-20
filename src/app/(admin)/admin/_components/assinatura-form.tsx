@@ -53,7 +53,7 @@ export function AssinaturaForm() {
       }
 
       toast.success("Assinatura criada!", {
-        description: `Próximo vencimento: ${result.nextDueDate}`,
+        description: `PrÃ³ximo vencimento: ${result.nextDueDate}`,
       });
 
       window.location.reload();
@@ -64,17 +64,17 @@ export function AssinaturaForm() {
 
   return (
     <form onSubmit={handleSubmit} className="space-y-5">
-      {/* ─── Dados pessoais ─── */}
+      {/* â”€â”€â”€ Dados pessoais â”€â”€â”€ */}
       <Card className="rounded-2xl">
         <CardHeader className="pb-4">
           <CardTitle className="text-base font-semibold">Seus dados</CardTitle>
           <CardDescription className="text-[13px]">
-            Necessários para emissão do documento fiscal e contato.
+            NecessÃ¡rios para emissÃ£o do documento fiscal e contato.
           </CardDescription>
         </CardHeader>
         <CardContent className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <FormField
-            label="Nome completo / Razão social"
+            label="Nome completo / RazÃ£o social"
             htmlFor="nome"
             required
             error={erroDe("nome")}
@@ -115,7 +115,7 @@ export function AssinaturaForm() {
           <FormField
             label="Dia de vencimento"
             required
-            hint="Escolha entre 1 e 15. Você será cobrado todo mês nesse dia."
+            hint="Escolha entre 1 e 15. VocÃª serÃ¡ cobrado todo mÃªs nesse dia."
           >
             <Combobox
               options={OPCOES_DIA}
@@ -128,14 +128,14 @@ export function AssinaturaForm() {
         </CardContent>
       </Card>
 
-      {/* ─── Forma de pagamento ─── */}
+      {/* â”€â”€â”€ Forma de pagamento â”€â”€â”€ */}
       <Card className="rounded-2xl">
         <CardHeader className="pb-4">
           <CardTitle className="text-base font-semibold">
             Forma de pagamento
           </CardTitle>
           <CardDescription className="text-[13px]">
-            Você pode trocar depois a qualquer momento.
+            VocÃª pode trocar depois a qualquer momento.
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
@@ -152,21 +152,21 @@ export function AssinaturaForm() {
               onClick={() => setBillingType("BOLETO")}
               icon={<FileText className="h-5 w-5" />}
               title="Boleto"
-              subtitle="Vence em 3 dias úteis"
+              subtitle="Vence em 3 dias Ãºteis"
             />
             <PaymentOption
               active={billingType === "CREDIT_CARD"}
               onClick={() => setBillingType("CREDIT_CARD")}
               icon={<CreditCard className="h-5 w-5" />}
-              title="Cartão"
-              subtitle="Cobrança recorrente"
+              title="CartÃ£o"
+              subtitle="CobranÃ§a recorrente"
             />
           </div>
 
           {billingType === "CREDIT_CARD" && (
             <div className="space-y-4 pt-4 border-t">
               <FormField
-                label="Número do cartão"
+                label="NÃºmero do cartÃ£o"
                 htmlFor="cardNumber"
                 required
                 error={erroDe("cardNumber")}
@@ -182,7 +182,7 @@ export function AssinaturaForm() {
               </FormField>
 
               <FormField
-                label="Nome impresso no cartão"
+                label="Nome impresso no cartÃ£o"
                 htmlFor="cardHolder"
                 required
                 error={erroDe("cardHolder")}
@@ -190,14 +190,14 @@ export function AssinaturaForm() {
                 <Input
                   id="cardHolder"
                   name="cardHolder"
-                  placeholder="Como está impresso"
+                  placeholder="Como estÃ¡ impresso"
                   required
                 />
               </FormField>
 
               <div className="grid grid-cols-3 gap-3">
                 <FormField
-                  label="Mês"
+                  label="MÃªs"
                   htmlFor="cardExpiryMonth"
                   required
                   error={erroDe("cardExpiryMonth")}
@@ -251,7 +251,7 @@ export function AssinaturaForm() {
                   />
                 </FormField>
                 <FormField
-                  label="Número"
+                  label="NÃºmero"
                   htmlFor="holderAddressNumber"
                   required
                 >
@@ -268,7 +268,7 @@ export function AssinaturaForm() {
         </CardContent>
       </Card>
 
-      {/* ─── Resumo + Submit ─── */}
+      {/* â”€â”€â”€ Resumo + Submit â”€â”€â”€ */}
       <Card className="rounded-2xl border-primary/30 bg-primary/5">
         <CardContent className="pt-6 space-y-4">
           <div className="flex items-center justify-between">
@@ -280,7 +280,7 @@ export function AssinaturaForm() {
             </span>
           </div>
           <p className="text-[12px] text-muted-foreground">
-            A primeira cobrança é gerada agora. A próxima será no dia de
+            A primeira cobranÃ§a Ã© gerada agora. A prÃ³xima serÃ¡ no dia de
             vencimento escolhido.
           </p>
             <Button
@@ -304,9 +304,9 @@ export function AssinaturaForm() {
   );
 }
 
-// ═══════════════════════════════════════════════════════
+// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
 // Subcomponente: card de forma de pagamento
-// ═══════════════════════════════════════════════════════
+// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
 
 function PaymentOption({
   active,

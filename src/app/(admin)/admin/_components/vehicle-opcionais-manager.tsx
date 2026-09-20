@@ -48,7 +48,7 @@ export function VehicleOpcionaisManager({
     }, {});
   }, [opcionais]);
 
-  // Verifica se já adicionado
+  // Verifica se jÃ¡ adicionado
   const isAdicionado = (nome: string) =>
     value.some((v) => v.toLowerCase() === nome.toLowerCase());
 
@@ -79,7 +79,7 @@ export function VehicleOpcionaisManager({
     onChange(value.filter((v) => v !== item));
   };
 
-  // Cria novo opcional no banco e adiciona ao veículo
+  // Cria novo opcional no banco e adiciona ao veÃ­culo
   const handleCreateAndAdd = async () => {
     const nome = (search || customInput).trim();
     if (!nome) return;
@@ -105,7 +105,7 @@ export function VehicleOpcionaisManager({
 
   return (
     <div className="space-y-3">
-      {/* ─── Chips dos itens selecionados ─── */}
+      {/* â”€â”€â”€ Chips dos itens selecionados â”€â”€â”€ */}
       {value.length > 0 ? (
         <div className="flex flex-wrap gap-2 rounded-lg border bg-muted/20 p-3 min-h-[60px]">
           {value.map((item, i) => (
@@ -133,7 +133,7 @@ export function VehicleOpcionaisManager({
         </div>
       )}
 
-      {/* ─── Adicionar itens ─── */}
+      {/* â”€â”€â”€ Adicionar itens â”€â”€â”€ */}
       <div className="flex flex-col sm:flex-row gap-2">
         <Popover open={open} onOpenChange={setOpen} modal={false}>
           <PopoverTrigger asChild>
@@ -233,7 +233,7 @@ export function VehicleOpcionaisManager({
                       )
                     )}
 
-                    {/* Criar item quando busca não existe */}
+                    {/* Criar item quando busca nÃ£o existe */}
                     {search.trim() && !buscaExiste && !isLoading && (
                       <>
                         <CommandSeparator />

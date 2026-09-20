@@ -76,11 +76,11 @@ interface VehicleRowProps {
 }
 
 export function VehicleRow({ veiculo, onEdit }: VehicleRowProps) {
-  // ─── Estados dos dialogs ───
+  // â”€â”€â”€ Estados dos dialogs â”€â”€â”€
   const [openDelete, setOpenDelete] = useState(false);
   const [openArquivar, setOpenArquivar] = useState(false);
 
-  // ─── Mutations ───
+  // â”€â”€â”€ Mutations â”€â”€â”€
   const toggleMutation = useToggleVeiculoAtivo();
   const deleteMutation = useDeleteVeiculo();
   const arquivarMutation = useArquivarVeiculo();
@@ -88,7 +88,7 @@ export function VehicleRow({ veiculo, onEdit }: VehicleRowProps) {
   const { data: cores = [] } = useCores();
   const corHex = cores.find((c) => c.nome === veiculo.cor)?.hex;
 
-  // ─── Handlers ───
+  // â”€â”€â”€ Handlers â”€â”€â”€
   const handleToggle = () => {
     toggleMutation.mutate({ id: veiculo.id, ativo: !veiculo.ativo });
   };
@@ -110,15 +110,15 @@ export function VehicleRow({ veiculo, onEdit }: VehicleRowProps) {
     });
   };
 
-  // ─── Flags ───
+  // â”€â”€â”€ Flags â”€â”€â”€
   const isDisponivel = veiculo.status === "disponivel";
   const isArquivado = !isDisponivel;
 
-  // ─── Specs ───
+  // â”€â”€â”€ Specs â”€â”€â”€
   const specs = [
   {
     icon: Gauge,
-    value: veiculo.km != null ? formatKM(veiculo.km) : "KM não informada",
+    value: veiculo.km != null ? formatKM(veiculo.km) : "KM nÃ£o informada",
     muted: veiculo.km == null,
   },
   {
@@ -129,7 +129,7 @@ export function VehicleRow({ veiculo, onEdit }: VehicleRowProps) {
     muted: false,
   },
   { icon: Calendar, value: String(veiculo.ano), muted: false },
-  // ─── Motor (NOVO) ───
+  // â”€â”€â”€ Motor (NOVO) â”€â”€â”€
   {
     icon: Cog,
     value: veiculo.motor,
@@ -162,7 +162,7 @@ export function VehicleRow({ veiculo, onEdit }: VehicleRowProps) {
           isArquivado && "opacity-75"
         )}
       >
-        {/* ═══════════ IMAGEM ═══════════ */}
+        {/* â•â•â•â•â•â•â•â•â•â•â• IMAGEM â•â•â•â•â•â•â•â•â•â•â• */}
         <button
           type="button"
           onClick={() => onEdit(veiculo)}
@@ -183,10 +183,10 @@ export function VehicleRow({ veiculo, onEdit }: VehicleRowProps) {
           )}
         </button>
 
-        {/* ═══════════ INFO PRINCIPAL ═══════════ */}
+        {/* â•â•â•â•â•â•â•â•â•â•â• INFO PRINCIPAL â•â•â•â•â•â•â•â•â•â•â• */}
         <div className="flex-1 min-w-0 flex flex-col justify-between py-0.5">
           <div>
-            {/* Título + Badges */}
+            {/* TÃ­tulo + Badges */}
             <div className="flex items-center gap-2 flex-wrap">
               <button
                 type="button"
@@ -209,7 +209,7 @@ export function VehicleRow({ veiculo, onEdit }: VehicleRowProps) {
                 </span>
               )}
 
-              {/* Badge de Status do Veículo */}
+              {/* Badge de Status do VeÃ­culo */}
               {veiculo.status === "vendido" && (
                 <span className="inline-flex items-center gap-1 rounded-full bg-green-100 dark:bg-green-950/60 text-green-700 dark:text-green-400 px-2 py-0.5 text-[10px] font-medium">
                   <ShoppingCart className="h-3 w-3" />
@@ -224,7 +224,7 @@ export function VehicleRow({ veiculo, onEdit }: VehicleRowProps) {
                 </span>
               )}
 
-              {/* Badge de Ativo/Inativo (só disponíveis) */}
+              {/* Badge de Ativo/Inativo (sÃ³ disponÃ­veis) */}
               {isDisponivel && (
                 <>
                   {veiculo.ativo ? (
@@ -242,7 +242,7 @@ export function VehicleRow({ veiculo, onEdit }: VehicleRowProps) {
               )}
             </div>
 
-            {/* Especificações */}
+            {/* EspecificaÃ§Ãµes */}
             <div className="mt-2 flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-muted-foreground">
               {specs.map((spec, i) => (
                 <div key={i} className="flex items-center gap-1.5">
@@ -277,7 +277,7 @@ export function VehicleRow({ veiculo, onEdit }: VehicleRowProps) {
             )}
           </div>
 
-          {/* Preço mobile */}
+          {/* PreÃ§o mobile */}
           <div className="lg:hidden mt-2">
             <p className="text-base font-bold tracking-tight">
               {formatBRL(veiculo.preco)}
@@ -285,7 +285,7 @@ export function VehicleRow({ veiculo, onEdit }: VehicleRowProps) {
           </div>
         </div>
 
-        {/* ═══════════ PREÇO (desktop) ═══════════ */}
+        {/* â•â•â•â•â•â•â•â•â•â•â• PREÃ‡O (desktop) â•â•â•â•â•â•â•â•â•â•â• */}
         <div className="hidden lg:flex flex-col justify-center items-end px-4 shrink-0">
           <p className="text-lg font-bold tracking-tight">
             {formatBRL(veiculo.preco)}
@@ -297,9 +297,9 @@ export function VehicleRow({ veiculo, onEdit }: VehicleRowProps) {
           )}
         </div>
 
-        {/* ═══════════ AÇÕES ═══════════ */}
+        {/* â•â•â•â•â•â•â•â•â•â•â• AÃ‡Ã•ES â•â•â•â•â•â•â•â•â•â•â• */}
         <div className="flex items-center gap-1 shrink-0">
-          {/* Toggle ativo (só disponível) */}
+          {/* Toggle ativo (sÃ³ disponÃ­vel) */}
           {isDisponivel && (
             <div className="hidden lg:flex items-center gap-2 pr-2">
               <Tooltip>
@@ -320,7 +320,7 @@ export function VehicleRow({ veiculo, onEdit }: VehicleRowProps) {
             </div>
           )}
 
-          {/* Botões (telas grandes) */}
+          {/* BotÃµes (telas grandes) */}
           <div className="hidden md:flex items-center gap-1">
             <Tooltip>
               <TooltipTrigger asChild>
@@ -357,7 +357,7 @@ export function VehicleRow({ veiculo, onEdit }: VehicleRowProps) {
               <TooltipContent>Editar</TooltipContent>
             </Tooltip>
 
-            {/* Arquivar (só disponível) */}
+            {/* Arquivar (sÃ³ disponÃ­vel) */}
             {isDisponivel && (
               <Tooltip>
                 <TooltipTrigger asChild>
@@ -366,7 +366,7 @@ export function VehicleRow({ veiculo, onEdit }: VehicleRowProps) {
                     size="icon"
                     onClick={() => setOpenArquivar(true)}
                     className="h-9 w-9 text-orange-600 hover:text-orange-700 hover:bg-orange-50 dark:hover:bg-orange-950/40"
-                    aria-label="Arquivar veículo"
+                    aria-label="Arquivar veÃ­culo"
                   >
                     <Ban className="h-4 w-4" />
                   </Button>
@@ -375,7 +375,7 @@ export function VehicleRow({ veiculo, onEdit }: VehicleRowProps) {
               </Tooltip>
             )}
 
-            {/* Restaurar (só arquivado) */}
+            {/* Restaurar (sÃ³ arquivado) */}
             {isArquivado && (
               <Tooltip>
                 <TooltipTrigger asChild>
@@ -394,7 +394,7 @@ export function VehicleRow({ veiculo, onEdit }: VehicleRowProps) {
               </Tooltip>
             )}
 
-            {/* Excluir permanente (só arquivado) */}
+            {/* Excluir permanente (sÃ³ arquivado) */}
             {isArquivado && (
               <Tooltip>
                 <TooltipTrigger asChild>
@@ -413,14 +413,14 @@ export function VehicleRow({ veiculo, onEdit }: VehicleRowProps) {
             )}
           </div>
 
-          {/* Menu ⋯ (mobile) */}
+          {/* Menu â‹¯ (mobile) */}
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button
                 variant="ghost"
                 size="icon"
                 className="h-9 w-9 md:hidden"
-                aria-label="Mais ações"
+                aria-label="Mais aÃ§Ãµes"
               >
                 <MoreVertical className="h-4 w-4" />
               </Button>
@@ -450,7 +450,7 @@ export function VehicleRow({ veiculo, onEdit }: VehicleRowProps) {
                 Editar
               </DropdownMenuItem>
 
-              {/* Opções para disponíveis */}
+              {/* OpÃ§Ãµes para disponÃ­veis */}
               {isDisponivel && (
                 <>
                   <DropdownMenuItem
@@ -482,12 +482,12 @@ export function VehicleRow({ veiculo, onEdit }: VehicleRowProps) {
                     disabled={arquivarMutation.isPending}
                   >
                     <Ban className="mr-2 h-4 w-4" />
-                    Arquivar veículo
+                    Arquivar veÃ­culo
                   </DropdownMenuItem>
                 </>
               )}
 
-              {/* Opções para arquivados */}
+              {/* OpÃ§Ãµes para arquivados */}
               {isArquivado && (
                 <>
                   <DropdownMenuSeparator />
@@ -519,16 +519,16 @@ export function VehicleRow({ veiculo, onEdit }: VehicleRowProps) {
           </DropdownMenu>
         </div>
 
-        {/* ═══════════ DIALOG: ARQUIVAR (escolha vendido/removido) ═══════════ */}
+        {/* â•â•â•â•â•â•â•â•â•â•â• DIALOG: ARQUIVAR (escolha vendido/removido) â•â•â•â•â•â•â•â•â•â•â• */}
         <Dialog open={openArquivar} onOpenChange={setOpenArquivar}>
           <DialogContent className="sm:max-w-xl max-h-[90vh] overflow-y-auto overflow-x-hidden">
             <DialogHeader>
               <DialogTitle className="flex items-center gap-2">
                 <Ban className="h-5 w-5 text-orange-600" />
-                Arquivar veículo
+                Arquivar veÃ­culo
               </DialogTitle>
               <DialogDescription className="pt-2">
-                O que você quer fazer com{" "}
+                O que vocÃª quer fazer com{" "}
                 <span className="font-semibold text-foreground">
                   {veiculo.marca} {veiculo.modelo} {veiculo.ano}
                 </span>
@@ -540,16 +540,16 @@ export function VehicleRow({ veiculo, onEdit }: VehicleRowProps) {
               <div className="rounded-lg bg-orange-50 dark:bg-orange-950/30 border border-orange-200 dark:border-orange-900/60 p-3 text-xs space-y-1">
                 <p className="flex items-center gap-1.5 font-semibold text-orange-800 dark:text-orange-300">
                   <AlertTriangle className="h-3.5 w-3.5 shrink-0" />
-                  Todas as imagens serão apagadas do Storage
+                  Todas as imagens serÃ£o apagadas do Storage
                 </p>
                 <p className="text-orange-700 dark:text-orange-400">
-                  Isso libera espaço no servidor. O cadastro permanece no banco
-                  para histórico.
+                  Isso libera espaÃ§o no servidor. O cadastro permanece no banco
+                  para histÃ³rico.
                 </p>
               </div>
 
               <p className="text-xs text-muted-foreground">
-                Você pode restaurar o veículo depois, mas precisará subir as
+                VocÃª pode restaurar o veÃ­culo depois, mas precisarÃ¡ subir as
                 imagens novamente.
               </p>
             </div>
@@ -586,7 +586,7 @@ export function VehicleRow({ veiculo, onEdit }: VehicleRowProps) {
           </DialogContent>
         </Dialog>
 
-        {/* ═══════════ DIALOG: EXCLUIR PERMANENTEMENTE ═══════════ */}
+        {/* â•â•â•â•â•â•â•â•â•â•â• DIALOG: EXCLUIR PERMANENTEMENTE â•â•â•â•â•â•â•â•â•â•â• */}
       <Dialog open={openDelete} onOpenChange={setOpenDelete}>
         <DialogContent className="sm:max-w-md">
           <DialogHeader>
@@ -596,7 +596,7 @@ export function VehicleRow({ veiculo, onEdit }: VehicleRowProps) {
             </DialogTitle>
             <DialogDescription className="pt-2 space-y-3">
               <span>
-                Você está prestes a excluir{" "}
+                VocÃª estÃ¡ prestes a excluir{" "}
                 <span className="font-semibold text-foreground">
                   {veiculo.marca} {veiculo.modelo} {veiculo.ano}
                 </span>{" "}
@@ -606,11 +606,11 @@ export function VehicleRow({ veiculo, onEdit }: VehicleRowProps) {
               <span className="block rounded-lg bg-red-50 dark:bg-red-950/30 border border-red-200 dark:border-red-900/60 p-3 text-xs space-y-1">
                 <span className="flex items-center gap-1.5 font-semibold text-red-800 dark:text-red-300">
                   <AlertTriangle className="h-3.5 w-3.5 shrink-0" />
-                  Ação irreversível
+                  AÃ§Ã£o irreversÃ­vel
                 </span>
                 <span className="block text-red-700 dark:text-red-400">
-                  O cadastro será <strong>removido do banco</strong> e{" "}
-                  <strong>não poderá ser recuperado</strong>.
+                  O cadastro serÃ¡ <strong>removido do banco</strong> e{" "}
+                  <strong>nÃ£o poderÃ¡ ser recuperado</strong>.
                 </span>
               </span>
             </DialogDescription>

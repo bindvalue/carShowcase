@@ -43,25 +43,25 @@ export function VehicleSpecs({ veiculo }: VehicleSpecsProps) {
       value:
         veiculo.km != null
           ? veiculo.km.toLocaleString("pt-BR") + " km"
-          : "Não informada",
+          : "NÃ£o informada",
       muted: veiculo.km == null,
     },
     {
       icon: Settings2,
-      label: "Câmbio",
-      value: veiculo.cambio ? capitalize(veiculo.cambio) : "—",
+      label: "CÃ¢mbio",
+      value: veiculo.cambio ? capitalize(veiculo.cambio) : "â€”",
       muted: !veiculo.cambio,
     },
     {
       icon: Fuel,
-      label: "Combustível",
-      value: veiculo.combustivel ? capitalize(veiculo.combustivel) : "—",
+      label: "CombustÃ­vel",
+      value: veiculo.combustivel ? capitalize(veiculo.combustivel) : "â€”",
       muted: !veiculo.combustivel,
     },
     {
       icon: Palette,
       label: "Cor",
-      value: veiculo.cor || "—",
+      value: veiculo.cor || "â€”",
       muted: !veiculo.cor,
       color: corHex ?? undefined,
     },

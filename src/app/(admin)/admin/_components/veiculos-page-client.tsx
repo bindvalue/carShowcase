@@ -74,7 +74,7 @@ export function VeiculosPageClient() {
 
   return (
     <div className="p-6 md:p-8 space-y-6">
-      {/* ═══════════ HEADER ═══════════ */}
+      {/* â•â•â•â•â•â•â•â•â•â•â• HEADER â•â•â•â•â•â•â•â•â•â•â• */}
       <div className="space-y-6">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <div>
@@ -82,10 +82,10 @@ export function VeiculosPageClient() {
               <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-primary/10">
                 <Package className="h-5 w-5 text-primary" />
               </div>
-              Veículos
+              VeÃ­culos
             </h1>
             <p className="text-sm text-muted-foreground mt-2 ml-11">
-              Gerencie seu estoque de veículos
+              Gerencie seu estoque de veÃ­culos
             </p>
           </div>
           <Button
@@ -96,7 +96,7 @@ export function VeiculosPageClient() {
             className="h-11 px-5"
           >
             <Plus className="mr-2 h-4 w-4" />
-            Novo veículo
+            Novo veÃ­culo
           </Button>
         </div>
 
@@ -104,7 +104,7 @@ export function VeiculosPageClient() {
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3">
           <StatCard
             label="Em estoque"
-            sublabel="Disponíveis"
+            sublabel="DisponÃ­veis"
             value={counts?.emEstoque ?? 0}
             icon={CheckCircle2}
             tone="green"
@@ -128,7 +128,7 @@ export function VeiculosPageClient() {
           />
           <StatCard
             label="Vendidos"
-            sublabel="Histórico"
+            sublabel="HistÃ³rico"
             value={counts?.vendidos ?? 0}
             icon={ShoppingCart}
             tone="blue"
@@ -170,7 +170,7 @@ export function VeiculosPageClient() {
         <div className="relative flex-1">
           <Search className="absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground pointer-events-none" />
           <Input
-            placeholder="Buscar por marca, modelo ou descrição..."
+            placeholder="Buscar por marca, modelo ou descriÃ§Ã£o..."
             value={search}
             onChange={(e) => {
               setSearch(e.target.value);
@@ -193,19 +193,19 @@ export function VeiculosPageClient() {
             </SelectTrigger>
             <SelectContent>
               <SelectItem value="em_estoque">
-                📦 Em estoque {counts ? `(${counts.emEstoque})` : ""}
+                ðŸ“¦ Em estoque {counts ? `(${counts.emEstoque})` : ""}
               </SelectItem>
               <SelectItem value="despublicados">
-                📝 Despublicados {counts ? `(${counts.despublicados})` : ""}
+                ðŸ“ Despublicados {counts ? `(${counts.despublicados})` : ""}
               </SelectItem>
               <SelectItem value="vendidos">
-                ✅ Vendidos {counts ? `(${counts.vendidos})` : ""}
+                âœ… Vendidos {counts ? `(${counts.vendidos})` : ""}
               </SelectItem>
               <SelectItem value="removidos">
-                🗑️ Removidos {counts ? `(${counts.removidos})` : ""}
+                ðŸ—‘ï¸ Removidos {counts ? `(${counts.removidos})` : ""}
               </SelectItem>
               <SelectItem value="todos">
-                🔎 Todos os status {counts ? `(${counts.total})` : ""}
+                ðŸ”Ž Todos os status {counts ? `(${counts.total})` : ""}
               </SelectItem>
             </SelectContent>
           </Select>
@@ -243,8 +243,8 @@ export function VeiculosPageClient() {
             <SelectContent>
               <SelectItem value="recentes">Mais recentes</SelectItem>
               <SelectItem value="antigos">Mais antigos</SelectItem>
-              <SelectItem value="preco-desc">Maior preço</SelectItem>
-              <SelectItem value="preco-asc">Menor preço</SelectItem>
+              <SelectItem value="preco-desc">Maior preÃ§o</SelectItem>
+              <SelectItem value="preco-asc">Menor preÃ§o</SelectItem>
             </SelectContent>
           </Select>
         </div>
@@ -262,14 +262,14 @@ export function VeiculosPageClient() {
           <div className="flex flex-col items-center justify-center py-16 text-center">
             <Package className="h-12 w-12 text-muted-foreground/40" />
             <p className="mt-4 text-lg font-semibold">
-              Nenhum veículo encontrado
+              Nenhum veÃ­culo encontrado
             </p>
             <p className="mt-2 text-sm text-muted-foreground">
               {debouncedSearch ||
               marca !== "todas" ||
               statusVeiculo !== "em_estoque"
                 ? "Tente ajustar os filtros."
-                : "Comece cadastrando seu primeiro veículo."}
+                : "Comece cadastrando seu primeiro veÃ­culo."}
             </p>
             <Button
               onClick={() => {
@@ -279,7 +279,7 @@ export function VeiculosPageClient() {
               className="mt-4 h-11"
             >
               <Plus className="mr-2 h-4 w-4" />
-              Cadastrar veículo
+              Cadastrar veÃ­culo
             </Button>
           </div>
         ) : (
@@ -293,7 +293,7 @@ export function VeiculosPageClient() {
             {totalPages > 1 && (
               <div className="flex items-center justify-between border-t p-4">
                 <p className="text-xs text-muted-foreground">
-                  Página {page} de {totalPages} · {total} veículos
+                  PÃ¡gina {page} de {totalPages} Â· {total} veÃ­culos
                 </p>
                 <div className="flex gap-2">
                   <Button
@@ -312,7 +312,7 @@ export function VeiculosPageClient() {
                     disabled={page === totalPages}
                     className="h-9"
                   >
-                    Próxima
+                    PrÃ³xima
                   </Button>
                 </div>
               </div>
