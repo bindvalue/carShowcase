@@ -7,22 +7,17 @@ import {
 } from "@/lib/asaas/client";
 import { createClient } from "@supabase/supabase-js";
 import { SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY } from "@/lib/env";
-
-// ═══════════════════════════════════════════════════════
-// SUPABASE ADMIN
-// ═══════════════════════════════════════════════════════
-
-const supabaseAdmin = createClient(
-  SUPABASE_URL,
-  SUPABASE_SERVICE_ROLE_KEY,
-  { auth: { persistSession: false } }
-);
-
-// ═══════════════════════════════════════════════════════
-// CONSTANTES DO PLANO
-// ═══════════════════════════════════════════════════════
-
 import { PLANO } from "@/lib/plano";
+
+// ═══════════════════════════════════════════════════════
+// SUPABASE ADMIN (lazy — não roda no build)
+// ═══════════════════════════════════════════════════════
+
+function getSupabaseAdmin() {
+  return createClient(SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY, {
+    auth: { persistSession: false },
+  });
+}
 
 // ═══════════════════════════════════════════════════════
 // TIPOS
@@ -64,11 +59,22 @@ interface AsaasPayment {
   bankSlipUrl?: string;
 }
 
+export interface PagamentoPendente {
+  id: string;
+  value: number;
+  dueDate: string;
+  status: string;
+  invoiceUrl: string | null;
+  bankSlipUrl: string | null;
+}
+
 // ═══════════════════════════════════════════════════════
 // CRIAR CLIENTE + ASSINATURA
 // ═══════════════════════════════════════════════════════
 
 export async function criarAssinatura(input: CriarAssinaturaInput) {
+  const supabaseAdmin = getSupabaseAdmin();
+
   const { userId, email, nome, cpfCnpj, telefone, billingType, nextDueDate } =
     input;
 
@@ -107,30 +113,29 @@ export async function criarAssinatura(input: CriarAssinaturaInput) {
   let customerId = existente?.asaas_customer_id;
 
   if (!customerId) {
-  try {
-    const customer = await createAsaasCustomer({
-      name: nome,
-      email,
-      cpfCnpj: cpfLimpo,
-      mobilePhone: telefone?.replace(/\D/g, ""),
-      externalReference: userId,
-    });
+    try {
+      const customer = await createAsaasCustomer({
+        name: nome,
+        email,
+        cpfCnpj: cpfLimpo,
+        mobilePhone: telefone?.replace(/\D/g, ""),
+        externalReference: userId,
+      });
 
-    if (!customer?.id) {
-      throw new Error("Asaas não retornou ID do cliente");
+      if (!customer?.id) {
+        throw new Error("Asaas não retornou ID do cliente");
+      }
+
+      customerId = customer.id;
+    } catch (err) {
+      console.error("[Asaas] Erro ao criar customer:", err);
+      throw new Error(
+        err instanceof Error
+          ? `Erro ao criar cliente: ${err.message}`
+          : "Falha ao criar cliente no Asaas"
+      );
     }
-
-    customerId = customer.id;
-  } catch (err) {
-    console.error("[Asaas] Erro ao criar customer:", err);
-    // ⬇️ Preserva a mensagem REAL do Asaas
-    throw new Error(
-      err instanceof Error
-        ? `Erro ao criar cliente: ${err.message}`
-        : "Falha ao criar cliente no Asaas"
-    );
   }
-}
 
   let subscriptionId: string;
   try {
@@ -191,6 +196,8 @@ export async function criarAssinatura(input: CriarAssinaturaInput) {
 // ═══════════════════════════════════════════════════════
 
 export async function cancelarAssinatura(userId: string) {
+  const supabaseAdmin = getSupabaseAdmin();
+
   if (!userId) throw new Error("userId é obrigatório");
 
   const { data: subscriber, error: erroBusca } = await supabaseAdmin
@@ -221,7 +228,9 @@ export async function cancelarAssinatura(userId: string) {
     .eq("user_id", userId);
 
   if (erroUpdate) {
-    throw new Error("Assinatura cancelada no Asaas, mas falhou ao atualizar banco");
+    throw new Error(
+      "Assinatura cancelada no Asaas, mas falhou ao atualizar banco"
+    );
   }
 
   return { success: true };
@@ -235,6 +244,8 @@ export async function getAssinaturaStatus(userId: string) {
   if (!userId) {
     return { temAssinatura: false, subscribed: false };
   }
+
+  const supabaseAdmin = getSupabaseAdmin();
 
   const { data: subscriber, error } = await supabaseAdmin
     .from("subscribers")
@@ -276,6 +287,8 @@ export async function getHistoricoPagamentos(
 ): Promise<AsaasPayment[]> {
   if (!userId) return [];
 
+  const supabaseAdmin = getSupabaseAdmin();
+
   const { data: subscriber, error } = await supabaseAdmin
     .from("subscribers")
     .select("asaas_subscription_id")
@@ -300,33 +313,16 @@ export async function getHistoricoPagamentos(
   }
 }
 
-export interface PagamentoPendente {
-  id: string;
-  value: number;
-  dueDate: string;
-  status: string;
-  invoiceUrl: string | null;
-  bankSlipUrl: string | null;
-  pixQrCodeUrl?: string | null;
-}
-
-/**
- * Busca o próximo pagamento pendente (PENDING ou OVERDUE) da assinatura.
- * Retorna null se não houver.
- */
-export interface PagamentoPendente {
-  id: string;
-  value: number;
-  dueDate: string;
-  status: string;
-  invoiceUrl: string | null;
-  bankSlipUrl: string | null;
-}
+// ═══════════════════════════════════════════════════════
+// PRÓXIMO PAGAMENTO PENDENTE
+// ═══════════════════════════════════════════════════════
 
 export async function getProximoPagamentoPendente(
   userId: string
 ): Promise<PagamentoPendente | null> {
   if (!userId) return null;
+
+  const supabaseAdmin = getSupabaseAdmin();
 
   const { data: subscriber, error } = await supabaseAdmin
     .from("subscribers")
@@ -339,7 +335,6 @@ export async function getProximoPagamentoPendente(
   try {
     const subscriptionId = subscriber.asaas_subscription_id;
 
-    // Busca PENDING e OVERDUE em paralelo
     const [pending, overdue] = await Promise.all([
       listAsaasPayments({
         subscription: subscriptionId,
@@ -369,7 +364,6 @@ export async function getProximoPagamentoPendente(
 
     if (todos.length === 0) return null;
 
-    // Pega o mais próximo (menor dueDate)
     const proximo = todos.sort((a, b) =>
       a.dueDate.localeCompare(b.dueDate)
     )[0];
