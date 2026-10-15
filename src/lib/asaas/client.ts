@@ -8,7 +8,6 @@ import {
 // ═══════════════════════════════════════════════════════
 // CONFIG
 // ═══════════════════════════════════════════════════════
-
 const REQUEST_TIMEOUT_MS = 15_000;
 const MAX_RETRIES = 2;
 
@@ -22,14 +21,13 @@ function getAsaasConfig(): AsaasConfig {
   return {
     url: getAsaasApiUrl(),
     key: getAsaasApiKey(),
-    isSandbox: isAsaasSandboxEnv(),  // ⚠️ USA A FUNÇÃO DO ENV
+    isSandbox: isAsaasSandboxEnv(), 
   };
 }
 
 // ═══════════════════════════════════════════════════════
 // TIPOS
 // ═══════════════════════════════════════════════════════
-
 interface AsaasRequestOptions {
   method?: "GET" | "POST" | "PUT" | "DELETE";
   body?: unknown;
@@ -74,7 +72,6 @@ export interface AsaasPayment {
 // ═══════════════════════════════════════════════════════
 // CORE FETCH
 // ═══════════════════════════════════════════════════════
-
 function sleep(ms: number) {
   return new Promise((r) => setTimeout(r, ms));
 }
@@ -91,6 +88,7 @@ async function asaasFetch<T>(
     access_token: config.key,
     "User-Agent": "WancarVeiculos/1.0",
   };
+  
   if (idempotencyKey) {
     headers["X-Idempotency-Key"] = idempotencyKey;
   }
@@ -130,8 +128,9 @@ async function asaasFetch<T>(
         const desc =
           err?.errors?.[0]?.description ||
           `Erro ${response.status} na API do Asaas`;
-        // Log enxuto — só status e endpoint, sem body
-        console.error(`[Asaas] ${response.status} ${method} ${endpoint}`);
+          
+        // CORREÇÃO: Log com rawText para expor exatamente o motivo da recusa do Asaas no console
+        console.error(`[Asaas] ${response.status} ${method} ${endpoint} | Motivo:`, rawText);
         throw new Error(desc);
       }
 
@@ -161,7 +160,6 @@ async function asaasFetch<T>(
 // ═══════════════════════════════════════════════════════
 // CUSTOMERS
 // ═══════════════════════════════════════════════════════
-
 export async function createAsaasCustomer(data: {
   name: string;
   email: string;
@@ -192,7 +190,6 @@ export async function getAsaasCustomer(
 // ═══════════════════════════════════════════════════════
 // SUBSCRIPTIONS
 // ═══════════════════════════════════════════════════════
-
 export async function createAsaasSubscription(data: {
   customer: string;
   billingType: "BOLETO" | "PIX" | "CREDIT_CARD" | "UNDEFINED";
@@ -220,8 +217,9 @@ export async function createAsaasSubscription(data: {
   return asaasFetch("/subscriptions", {
     method: "POST",
     body: data,
+    // CORREÇÃO: Alterado para incluir Date.now() e permitir novas tentativas sem cair no bloqueio de idempotência do Asaas
     idempotencyKey: data.externalReference
-      ? `sub-${data.externalReference}-${data.nextDueDate}`
+      ? `sub-${data.externalReference}-${data.nextDueDate}-${Date.now()}`
       : undefined,
   });
 }
@@ -237,7 +235,6 @@ export async function cancelAsaasSubscription(
 // ═══════════════════════════════════════════════════════
 // PAYMENTS
 // ═══════════════════════════════════════════════════════
-
 export async function listAsaasPayments(params: {
   customer?: string;
   subscription?: string;
@@ -258,7 +255,6 @@ export async function listAsaasPayments(params: {
 // ═══════════════════════════════════════════════════════
 // HELPERS DE AMBIENTE
 // ═══════════════════════════════════════════════════════
-
 export function isAsaasSandbox(): boolean {
   return getAsaasConfig().isSandbox;
 }

@@ -159,9 +159,9 @@ export async function criarAssinaturaAction(
       userId: user.id,
       email: user.email,
       nome: data.nome,
-      cpfCnpj: data.cpfCnpj,
-      telefone: data.telefone || undefined,
-      billingType: data.billingType,
+      cpfCnpj: limparDocumento(data.cpfCnpj),
+      telefone: data.telefone ? limparDocumento(data.telefone) : undefined,
+      billingType: data.billingType as "BOLETO" | "PIX" | "CREDIT_CARD",
       nextDueDate,
       creditCard:
         data.billingType === "CREDIT_CARD"
@@ -196,9 +196,19 @@ export async function criarAssinaturaAction(
     };
   } catch (err) {
     console.error("[criarAssinaturaAction] Erro:", err);
+
+    // Extrai apenas a string da mensagem de forma limpa para não quebrar a serialização do Next.js
+    let errorMessage = "Erro ao processar assinatura";
+    if (err instanceof Error) {
+      errorMessage = err.message;
+    } else if (typeof err === "string") {
+      errorMessage = err;
+    }
+
+    // Retorna um objeto limpo e previsível para o frontend
     return {
       success: false,
-      error: err instanceof Error ? err.message : "Erro ao criar assinatura",
+      error: errorMessage,
     };
   }
 }

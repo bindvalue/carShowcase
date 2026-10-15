@@ -1,8 +1,10 @@
 "use client";
 
 import { useState, useTransition } from "react";
+import { useRouter } from "next/navigation";
 import { Loader2, CreditCard, QrCode, FileText } from "lucide-react";
 import { toast } from "sonner";
+
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
@@ -14,6 +16,7 @@ import {
 } from "@/components/ui/card";
 import { Combobox } from "@/components/ui/combobox";
 import { FormField } from "@/components/ui/form-field";
+
 import { formatarCpfCnpj } from "@/lib/validations/cpf-cnpj";
 import { criarAssinaturaAction } from "@/actions/assinatura.actions";
 import { PLANO } from "@/lib/plano";
@@ -26,11 +29,14 @@ const OPCOES_DIA = Array.from({ length: 15 }, (_, i) => ({
 }));
 
 export function AssinaturaForm() {
+  const router = useRouter();
   const [isPending, startTransition] = useTransition();
+
   const [billingType, setBillingType] = useState<BillingType>("PIX");
   const [cpfCnpj, setCpfCnpj] = useState("");
   const [telefone, setTelefone] = useState("");
   const [dueDay, setDueDay] = useState("15");
+  
   const [fieldErrors, setFieldErrors] = useState<Record<string, string[]>>({});
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
@@ -56,7 +62,8 @@ export function AssinaturaForm() {
         description: `Próximo vencimento: ${result.nextDueDate}`,
       });
 
-      window.location.reload();
+      // Atualiza os dados da página de forma reativa sem recarregar o navegador
+      router.refresh();
     });
   };
 
@@ -64,7 +71,7 @@ export function AssinaturaForm() {
 
   return (
     <form onSubmit={handleSubmit} className="space-y-5">
-      {/* â”€â”€â”€ Dados pessoais â”€â”€â”€ */}
+      {/* ─── Dados pessoais ─── */}
       <Card className="rounded-2xl">
         <CardHeader className="pb-4">
           <CardTitle className="text-base font-semibold">Seus dados</CardTitle>
@@ -128,7 +135,7 @@ export function AssinaturaForm() {
         </CardContent>
       </Card>
 
-      {/* â”€â”€â”€ Forma de pagamento â”€â”€â”€ */}
+      {/* ─── Forma de pagamento ─── */}
       <Card className="rounded-2xl">
         <CardHeader className="pb-4">
           <CardTitle className="text-base font-semibold">
@@ -268,7 +275,7 @@ export function AssinaturaForm() {
         </CardContent>
       </Card>
 
-      {/* â”€â”€â”€ Resumo + Submit â”€â”€â”€ */}
+      {/* ─── Resumo + Submit ─── */}
       <Card className="rounded-2xl border-primary/30 bg-primary/5">
         <CardContent className="pt-6 space-y-4">
           <div className="flex items-center justify-between">
@@ -283,12 +290,12 @@ export function AssinaturaForm() {
             A primeira cobrança é gerada agora. A próxima será no dia de
             vencimento escolhido.
           </p>
-            <Button
-              type="submit"
-              disabled={isPending}
-              className="w-full h-10 text-[15px] font-medium rounded-[10px]"
-              size="lg"
-            >
+          <Button
+            type="submit"
+            disabled={isPending}
+            className="w-full h-10 text-[15px] font-medium rounded-[10px]"
+            size="lg"
+          >
             {isPending ? (
               <>
                 <Loader2 className="mr-2 h-4 w-4 animate-spin" />
@@ -304,10 +311,9 @@ export function AssinaturaForm() {
   );
 }
 
-// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+// ═══════════════════════════════════════════════════════
 // Subcomponente: card de forma de pagamento
-// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
-
+// ═══════════════════════════════════════════════════════
 function PaymentOption({
   active,
   onClick,
