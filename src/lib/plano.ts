@@ -6,11 +6,6 @@
 export const PLANO = {
   valor: 155.0,                                    // ⚠️ TEMPORÁRIO — volta pra 155.0 depois
   ciclo: "MONTHLY" as const,
-  descricao: "Teste de integração — ignorar",    // ⚠️ volta pra descrição real depois
+  descricao: "Assinatura mensal do sistema de gestão e vitrine de veículos",
   valorFormatado: "R$ 155,00",                     // ⚠️ TEMPORÁRIO
 };
-
-// Quando terminar o teste, troca tudo pra:
-// valor: 155.0,
-// descricao: "Assinatura Wancar Veículos — Plano Mensal",
-// valorFormatado: "R$ 155,00",

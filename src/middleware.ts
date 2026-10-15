@@ -90,18 +90,14 @@ export async function middleware(request: NextRequest) {
 /**
  * ⚠️ Força o charset UTF-8 nas respostas HTML.
  * 
- * Por quê: o Cloudflare Workers (via OpenNext) às vezes serve o HTML
- * sem o `charset=utf-8` no Content-Type, fazendo o browser interpretar
- * os acentos como Latin-1 e mostrar "veículo" em vez de "veículo".
+ * Adiciona charset UTF-8 quando a resposta já está identificada como HTML.
  * 
  * Só aplica em HTML — JSON, CSS, JS já vêm com charset correto.
  */
 function forcarCharsetUtf8(response: NextResponse) {
   const contentType = response.headers.get("Content-Type");
   
-  // Se não tem Content-Type, define como HTML UTF-8
   if (!contentType) {
-    response.headers.set("Content-Type", "text/html; charset=utf-8");
     return;
   }
 
