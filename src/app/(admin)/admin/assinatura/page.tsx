@@ -49,7 +49,10 @@ async function AssinaturaContent() {
   return (
     <div className="space-y-6">
       {mostrarAviso && (
-        <AssinaturaPendenteAviso bloqueado={inadimplente} />
+        <AssinaturaPendenteAviso
+          bloqueado={inadimplente}
+          mostrarSincronizar={status.temAssinatura}
+        />
       )}
 
       <AssinaturaCard

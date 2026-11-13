@@ -1,4 +1,5 @@
 import { Info } from "lucide-react";
+import { AssinaturaSincronizarButton } from "./assinatura-sincronizar-button";
 
 interface AssinaturaPendenteAvisoProps {
   /**
@@ -6,10 +7,13 @@ interface AssinaturaPendenteAvisoProps {
    * Se `false`, mostra mensagem "pendente" (tolerância).
    */
   bloqueado?: boolean;
+  /** Mostra o botão "já paguei" (só faz sentido se já existe assinatura). */
+  mostrarSincronizar?: boolean;
 }
 
 export function AssinaturaPendenteAviso({
   bloqueado = false,
+  mostrarSincronizar = false,
 }: AssinaturaPendenteAvisoProps) {
   return (
     <div className="flex items-start gap-3 rounded-xl border border-border bg-muted/40 px-4 py-3.5">
@@ -28,6 +32,11 @@ export function AssinaturaPendenteAviso({
             ? "O acesso à edição de veículos está desabilitado até a regularização do pagamento."
             : "Regularize o pagamento para manter o acesso completo à edição de veículos."}
         </p>
+        {mostrarSincronizar && (
+          <div className="mt-2.5">
+            <AssinaturaSincronizarButton />
+          </div>
+        )}
       </div>
     </div>
   );

@@ -46,6 +46,44 @@ interface AsaasWebhookPayload {
   subscription?: AsaasSubscriptionPayload;
 }
 
+/**
+ * Descobre o user_id do assinante: externalReference primeiro; se não vier,
+ * busca em subscribers pelo ID da assinatura ou do cliente no Asaas.
+ */
+async function resolverUserId(
+  payload: AsaasWebhookPayload
+): Promise<string | null> {
+  const ref =
+    payload.payment?.externalReference ??
+    payload.subscription?.externalReference;
+  if (ref) return ref;
+
+  const supabase = getSupabaseAdmin();
+  const subscriptionId =
+    payload.payment?.subscription ?? payload.subscription?.id;
+  const customerId = payload.payment?.customer ?? payload.subscription?.customer;
+
+  if (subscriptionId) {
+    const { data } = await supabase
+      .from("subscribers")
+      .select("user_id")
+      .eq("asaas_subscription_id", subscriptionId)
+      .maybeSingle();
+    if (data?.user_id) return data.user_id as string;
+  }
+
+  if (customerId) {
+    const { data } = await supabase
+      .from("subscribers")
+      .select("user_id")
+      .eq("asaas_customer_id", customerId)
+      .maybeSingle();
+    if (data?.user_id) return data.user_id as string;
+  }
+
+  return null;
+}
+
 export async function POST(request: Request) {
   const inicio = Date.now();
 
@@ -63,9 +101,7 @@ export async function POST(request: Request) {
 
     const payload = (await request.json()) as AsaasWebhookPayload;
 
-    const userId =
-      payload.payment?.externalReference ??
-      payload.subscription?.externalReference;
+    const userId = await resolverUserId(payload);
 
     console.log("[Webhook Asaas] recebido", {
       event: payload.event,
@@ -77,6 +113,12 @@ export async function POST(request: Request) {
     });
 
     if (!userId) {
+      console.warn("[Webhook Asaas] Assinante não localizado", {
+        event: payload.event,
+        paymentId: payload.payment?.id,
+        subscriptionId: payload.payment?.subscription ?? payload.subscription?.id,
+        customerId: payload.payment?.customer ?? payload.subscription?.customer,
+      });
       return NextResponse.json({ received: true, warning: "no_user_id" });
     }
 
@@ -107,7 +149,8 @@ export async function POST(request: Request) {
     return NextResponse.json({ received: true });
   } catch (err) {
     console.error("[Webhook Asaas] ERRO:", err);
-    return NextResponse.json({ received: true, error: "logged" });
+    // 500 faz o Asaas reenviar o evento (evita perder pagamento por falha temporária)
+    return NextResponse.json({ error: "internal_error" }, { status: 500 });
   }
 }
 
@@ -145,6 +188,7 @@ async function handlePaymentSuccess(userId: string, payload: AsaasWebhookPayload
 
   if (error) {
     console.error("[Webhook Asaas] Erro ao atualizar pagamento:", error);
+    throw new Error("Falha ao atualizar pagamento no banco");
   }
 }
 

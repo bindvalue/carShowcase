@@ -386,3 +386,115 @@ export async function getProximoPagamentoPendente(
     return null;
   }
 }
+
+
+
+// ═══════════════════════════════════════════════════════
+// SINCRONIZAR COM O ASAAS (fallback quando o webhook falha)
+// ═══════════════════════════════════════════════════════
+
+const STATUS_PAGO = ["RECEIVED", "CONFIRMED", "RECEIVED_IN_CASH"];
+const DIAS_TOLERANCIA_ATRASO_SYNC = 5;
+
+function diasDeAtraso(yyyymmdd: string): number {
+  const [ano, mes, dia] = yyyymmdd.split("-").map(Number);
+  const venc = new Date(ano, mes - 1, dia);
+  const hoje = new Date();
+  hoje.setHours(0, 0, 0, 0);
+  return Math.floor((hoje.getTime() - venc.getTime()) / 86_400_000);
+}
+
+function proximoMes(yyyymmdd: string): string {
+  const [ano, mes, dia] = yyyymmdd.split("-").map(Number);
+  const anoAlvo = mes === 12 ? ano + 1 : ano;
+  const mesAlvo = mes === 12 ? 1 : mes + 1;
+  const ultimoDia = new Date(anoAlvo, mesAlvo, 0).getDate();
+  return `${anoAlvo}-${String(mesAlvo).padStart(2, "0")}-${String(
+    Math.min(dia, ultimoDia)
+  ).padStart(2, "0")}`;
+}
+
+export async function sincronizarAssinatura(userId: string) {
+  if (!userId) throw new Error("userId é obrigatório");
+
+  const supabaseAdmin = getSupabaseAdmin();
+
+  const { data: subscriber, error } = await supabaseAdmin
+    .from("subscribers")
+    .select("asaas_subscription_id, asaas_customer_id, is_lifetime")
+    .eq("user_id", userId)
+    .maybeSingle();
+
+  if (error) throw new Error("Falha ao consultar assinatura");
+  if (!subscriber) throw new Error("Assinatura não encontrada");
+  if (subscriber.is_lifetime) return { atualizado: false, subscribed: true };
+  if (!subscriber.asaas_subscription_id && !subscriber.asaas_customer_id) {
+    throw new Error("Assinatura não encontrada");
+  }
+
+  const result = await listAsaasPayments({
+    ...(subscriber.asaas_subscription_id
+      ? { subscription: subscriber.asaas_subscription_id }
+      : { customer: subscriber.asaas_customer_id! }),
+    limit: 50,
+  });
+
+  type Row = {
+    id: string;
+    value: number;
+    status: string;
+    dueDate: string;
+    clientPaymentDate?: string;
+  };
+  const pagamentos = (result?.data ?? []) as Row[];
+
+  const pagos = pagamentos
+    .filter((p) => STATUS_PAGO.includes(p.status))
+    .sort((a, b) => b.dueDate.localeCompare(a.dueDate));
+  const ultimoPago = pagos[0];
+
+  const atrasoBloqueante = pagamentos.some(
+    (p) =>
+      p.status === "OVERDUE" &&
+      diasDeAtraso(p.dueDate) > DIAS_TOLERANCIA_ATRASO_SYNC
+  );
+
+  if (atrasoBloqueante) {
+    await supabaseAdmin
+      .from("subscribers")
+      .update({
+        subscribed: false,
+        asaas_subscription_status: "OVERDUE",
+        updated_at: new Date().toISOString(),
+      })
+      .eq("user_id", userId);
+    return { atualizado: true, subscribed: false };
+  }
+
+  if (!ultimoPago) {
+    // Nada pago ainda: não altera o estado atual
+    return { atualizado: false, subscribed: null };
+  }
+
+  const proxVenc = proximoMes(ultimoPago.dueDate);
+
+  const { error: erroUpdate } = await supabaseAdmin
+    .from("subscribers")
+    .update({
+      subscribed: true,
+      asaas_subscription_status: "ACTIVE",
+      last_payment_id: ultimoPago.id,
+      last_payment_at: ultimoPago.clientPaymentDate
+        ? new Date(ultimoPago.clientPaymentDate).toISOString()
+        : new Date().toISOString(),
+      last_payment_value: ultimoPago.value,
+      next_due_date: proxVenc,
+      subscription_end: proxVenc,
+      updated_at: new Date().toISOString(),
+    })
+    .eq("user_id", userId);
+
+  if (erroUpdate) throw new Error("Falha ao atualizar assinatura no banco");
+
+  return { atualizado: true, subscribed: true };
+}

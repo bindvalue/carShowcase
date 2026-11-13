@@ -166,3 +166,35 @@ export async function cancelarAssinatura(): Promise<{
     return { success: false, error: err instanceof Error ? err.message : "Erro ao cancelar" };
   }
 }
+
+
+
+// ═══════════════════════════════════════════════════════
+// SINCRONIZAR PAGAMENTO COM O ASAAS
+// ═══════════════════════════════════════════════════════
+export async function sincronizarAssinaturaAction(): Promise<{
+  success: boolean;
+  subscribed?: boolean | null;
+  error?: string;
+}> {
+  try {
+    const supabase = await createClient();
+    const { data: { user } } = await supabase.auth.getUser();
+
+    if (!user) return { success: false, error: "Não autenticado" };
+
+    const { sincronizarAssinatura } = await import("@/services/asaas.service");
+    const result = await sincronizarAssinatura(user.id);
+
+    revalidatePath("/admin/assinatura");
+    revalidatePath("/admin/veiculos");
+
+    return { success: true, subscribed: result.subscribed };
+  } catch (err) {
+    console.error("[sincronizarAssinaturaAction] Erro:", err);
+    return {
+      success: false,
+      error: err instanceof Error ? err.message : "Erro ao sincronizar",
+    };
+  }
+}
