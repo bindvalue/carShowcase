@@ -32,6 +32,7 @@ import {
 import { formatBRL } from "@/lib/formatters";
 import { cancelarAssinatura } from "@/actions/assinatura.actions";
 import { PLANO } from "@/lib/plano";
+import { AssinaturaSincronizarButton } from "./assinatura-sincronizar-button";
 
 // â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
 // TIPOS
@@ -139,7 +140,7 @@ export function AssinaturaCard({
   // â•â•â•â•â•â•â•â•â•â•â• ASSINATURA ATIVA â•â•â•â•â•â•â•â•â•â•â•
   const isAtiva = status.subscribed;
   const vencimento = status.subscriptionEnd
-    ? new Date(status.subscriptionEnd)
+    ? new Date(status.subscriptionEnd.slice(0, 10) + "T00:00:00")
     : null;
 
   return (
@@ -189,7 +190,9 @@ export function AssinaturaCard({
                   Próximo vencimento
                 </p>
                 <p className="text-sm font-medium">
-                  {new Date(status.nextDueDate).toLocaleDateString("pt-BR")}
+                  {new Date(
+                    status.nextDueDate.slice(0, 10) + "T00:00:00"
+                  ).toLocaleDateString("pt-BR")}
                 </p>
               </div>
             )}
@@ -259,7 +262,8 @@ export function AssinaturaCard({
           )}
 
           {/* â”€â”€â”€ Ações â”€â”€â”€ */}
-          <div className="flex flex-col sm:flex-row gap-3 pt-4 border-t">
+          <div className="flex flex-col sm:flex-row sm:items-start gap-3 pt-4 border-t">
+            <AssinaturaSincronizarButton />
             <Button
               variant="outline"
               onClick={() => setOpenCancel(true)}

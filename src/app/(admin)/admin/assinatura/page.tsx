@@ -6,6 +6,7 @@ import {
   getAssinaturaStatus,
   getHistoricoPagamentos,
   getProximoPagamentoPendente,
+  sincronizarAssinatura,
 } from "@/services/asaas.service";
 import { AssinaturaCard } from "../_components/assinatura-card";
 import { AssinaturaHistory } from "../_components/assinatura-history";
@@ -28,8 +29,27 @@ async function AssinaturaContent() {
     redirect("/login");
   }
 
+  // Autocorreção: se o banco parece desatualizado (vencido/inativo), confere no Asaas
+  const hojeStr = new Date().toISOString().slice(0, 10);
+  const parecePendente = (s: Awaited<ReturnType<typeof getAssinaturaStatus>>) =>
+    s.temAssinatura &&
+    !s.isLifetime &&
+    (!s.subscribed ||
+      !s.subscriptionEnd ||
+      s.subscriptionEnd.slice(0, 10) <= hojeStr);
+
+  let statusInicial = await getAssinaturaStatus(user.id);
+  if (parecePendente(statusInicial)) {
+    try {
+      await sincronizarAssinatura(user.id);
+      statusInicial = await getAssinaturaStatus(user.id);
+    } catch (err) {
+      console.error("[Assinatura] Falha na autossincronização:", err);
+    }
+  }
+
   const [status, pagamentos, pagamentoPendente] = await Promise.all([
-    getAssinaturaStatus(user.id),
+    Promise.resolve(statusInicial),
     getHistoricoPagamentos(user.id).catch(() => []),
     getProximoPagamentoPendente(user.id).catch(() => null),
   ]);

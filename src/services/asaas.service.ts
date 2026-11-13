@@ -476,7 +476,10 @@ export async function sincronizarAssinatura(userId: string) {
     return { atualizado: false, subscribed: null };
   }
 
-  const proxVenc = proximoMes(ultimoPago.dueDate);
+  const pendentes = pagamentos
+    .filter((p) => p.status === "PENDING")
+    .sort((a, b) => a.dueDate.localeCompare(b.dueDate));
+  const proxVenc = pendentes[0]?.dueDate ?? proximoMes(ultimoPago.dueDate);
 
   const { error: erroUpdate } = await supabaseAdmin
     .from("subscribers")
